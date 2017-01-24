@@ -1,11 +1,14 @@
 package com.example.mvp_pokemon.data.models;
 
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import io.requery.Entity;
 import io.requery.ForeignKey;
 import io.requery.Key;
 import io.requery.OneToOne;
+import io.requery.Persistable;
 
 /**
  * Created on 13.01.2017.
@@ -14,7 +17,7 @@ import io.requery.OneToOne;
  */
 
 @Entity
-public abstract class AbstractPokemonModel {
+public abstract class AbstractPokemonModel implements Parcelable, Persistable {
 
     @Key
     @SerializedName("id")
