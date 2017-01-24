@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Mvp-pokemon</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="default_pokemon_number_input">1</string>
+    <string name="get_pokemon_button">GET POKEMON</string>
+</resources>
