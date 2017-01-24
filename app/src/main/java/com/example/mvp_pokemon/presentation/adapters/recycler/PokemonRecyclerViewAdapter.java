@@ -96,7 +96,7 @@ public class PokemonRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 pokemonNumber.setText(String.valueOf(pokemonModel.getId()));
                 pokemonName.setText(pokemonModel.getName());
                 Glide.with(context)
-                        .load(pokemonModel.getSpritesModel().getFrontDefault())
+                        .load(pokemonModel.getSprites().getFrontDefault())
                         .into(pokemonSprite);
             }
         }

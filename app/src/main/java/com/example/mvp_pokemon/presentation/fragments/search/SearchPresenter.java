@@ -79,7 +79,7 @@ public final class SearchPresenter extends BasePresenter<SearchView> implements 
         if (view != null && pokemonData != null) {
             view.setPokemonName(pokemonData.getName());
             view.setPokemonNumber(pokemonData.getId());
-            view.setPokemonSprite(pokemonData.getSpritesModel().getFrontDefault());
+            view.setPokemonSprite(pokemonData.getSprites().getFrontDefault());
         }
     }
 
