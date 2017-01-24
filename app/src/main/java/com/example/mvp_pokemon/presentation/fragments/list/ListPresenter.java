@@ -6,16 +6,18 @@ import com.example.mvp_pokemon.data.repositories.pokemon.interfaces.PokemonRepos
 import com.example.mvp_pokemon.presentation.BasePresenter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 public final class ListPresenter extends BasePresenter<ListView> implements ListPresenterInterface {
 
-    ArrayList<PokemonModel> pokemonList = new ArrayList<>();
+    List<PokemonModel> pokemonList = new ArrayList<>();
 
     // The view is available using the view variable
     PokemonRepositoryInterface pokemonRepository;
@@ -29,30 +31,14 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
     public void onStart(boolean firstStart) {
         super.onStart(firstStart);
         // Your code here. Your view is available using view and will not be null until next onStop()
-        pokemonRepository.getAllLocalPokemon().subscribe(new DisposableMaybeObserver<PokemonModel>() {
-            @Override
-            public void onSuccess(PokemonModel value) {
-                Timber.d("onSuccess");
-                addPokemon(value);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Timber.d("onError");
-            }
-
-            @Override
-            public void onComplete() {
-                Timber.d("onComplete");
-            }
-        });
+        getAllLocalPokemon();
     }
 
-    private void addPokemon(PokemonModel pokemon) {
+    private void setPokemonList(List<PokemonModel> pokemon) {
         if (pokemon != null) {
-            pokemonList.add(pokemon);
+            pokemonList =  pokemon;
             if (view != null) {
-                view.addPokemonToAdapter(pokemon);
+                view.setAdapterData(pokemon);
             }
         }
     }
@@ -74,8 +60,26 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
 
     @Override
     public void refreshData() {
-        if (view != null) {
-            view.setAdapterData(pokemonList);
-        }
+        getAllLocalPokemon();
+    }
+
+    private void getAllLocalPokemon() {
+        pokemonRepository.getAllLocalPokemon().subscribe(new DisposableSingleObserver<List<PokemonModel>>() {
+            @Override
+            public void onSuccess(List<PokemonModel> value) {
+                if (view != null) {
+                    view.hideSwipeRefreshLoader();
+                }
+
+                setPokemonList(value);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (view != null) {
+                    view.hideSwipeRefreshLoader();
+                }
+            }
+        });
     }
 }

@@ -4,10 +4,12 @@ import com.example.mvp_pokemon.data.models.PokemonModel;
 import com.example.mvp_pokemon.data.repositories.pokemon.interfaces.PokemonDataSource;
 import com.example.mvp_pokemon.data.retrofit.PokemonRetrofitInterface;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -35,7 +37,7 @@ public final class PokemonRemoteDataSource implements PokemonDataSource {
 
     @Deprecated
     @Override
-    public Maybe<PokemonModel> getAllLocalPokemon() {
+    public Single<List<PokemonModel>> getAllLocalPokemon() {
         // do nothing
         return null;
     }

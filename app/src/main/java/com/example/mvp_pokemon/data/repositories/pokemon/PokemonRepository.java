@@ -6,10 +6,12 @@ import com.example.mvp_pokemon.data.models.PokemonModel;
 import com.example.mvp_pokemon.data.repositories.pokemon.interfaces.PokemonDataSource;
 import com.example.mvp_pokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 public final class PokemonRepository implements PokemonRepositoryInterface {
 
@@ -39,7 +41,7 @@ public final class PokemonRepository implements PokemonRepositoryInterface {
     }
 
     @Override
-    public Maybe<PokemonModel> getAllLocalPokemon() {
+    public Single<List<PokemonModel>> getAllLocalPokemon() {
         return pokemonLocalDataSource.getAllLocalPokemon();
     }
 }

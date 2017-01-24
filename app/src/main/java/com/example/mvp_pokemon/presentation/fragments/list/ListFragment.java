@@ -4,31 +4,31 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.app.Fragment;
 import android.widget.ProgressBar;
 
 import com.example.mvp_pokemon.R;
+import com.example.mvp_pokemon.dagger.component.ApplicationComponent;
 import com.example.mvp_pokemon.data.models.PokemonModel;
 import com.example.mvp_pokemon.data.repositories.pokemon.PokemonRepositoryModule;
 import com.example.mvp_pokemon.presentation.BaseFragment;
 import com.example.mvp_pokemon.presentation.PresenterFactory;
-import com.example.mvp_pokemon.dagger.component.ApplicationComponent;
 import com.example.mvp_pokemon.presentation.adapters.recycler.PokemonRecyclerViewAdapter;
-import com.example.mvp_pokemon.presentation.fragments.list.dagger.ListViewModule;
 import com.example.mvp_pokemon.presentation.fragments.list.dagger.DaggerListViewComponent;
+import com.example.mvp_pokemon.presentation.fragments.list.dagger.ListViewModule;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import javax.inject.Inject;
 
 public final class ListFragment extends BaseFragment<ListPresenter, ListView> implements ListView {
 
@@ -118,14 +118,9 @@ public final class ListFragment extends BaseFragment<ListPresenter, ListView> im
     }
 
     @Override
-    public void setAdapterData(ArrayList<PokemonModel> pokemonList) {
+    public void setAdapterData(List<PokemonModel> pokemonList) {
         pokemonRecyclerViewAdapter.setPokemonList(pokemonList);
         swipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void addPokemonToAdapter(PokemonModel pokemonModel) {
-        pokemonRecyclerViewAdapter.addPokemon(pokemonModel);
     }
 
     @Override
@@ -135,5 +130,10 @@ public final class ListFragment extends BaseFragment<ListPresenter, ListView> im
         } else {
             progressBar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void hideSwipeRefreshLoader() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

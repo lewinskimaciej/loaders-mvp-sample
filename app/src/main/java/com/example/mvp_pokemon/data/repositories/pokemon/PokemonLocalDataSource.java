@@ -3,10 +3,12 @@ package com.example.mvp_pokemon.data.repositories.pokemon;
 import com.example.mvp_pokemon.data.models.PokemonModel;
 import com.example.mvp_pokemon.data.repositories.pokemon.interfaces.PokemonDataSource;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -42,29 +44,18 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
                     @Override
                     public void onError(Throwable e) {
                         Timber.d(e, "not inserted");
-                        database.update(pokemonModel)
-                                .subscribeOn(Schedulers.computation())
-                                .subscribe(new DisposableSingleObserver<PokemonModel>() {
-                            @Override
-                            public void onSuccess(PokemonModel value) {
-                                Timber.d("updated");
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                Timber.d("not updated");
-                            }
-                        });
                     }
                 });
 
     }
 
     @Override
-    public Maybe<PokemonModel> getAllLocalPokemon() {
+    public Single<List<PokemonModel>> getAllLocalPokemon() {
         return database.select(PokemonModel.class)
+                .orderBy(PokemonModel.ID)
                 .get()
-                .maybe()
+                .observable()
+                .toList()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread());
     }

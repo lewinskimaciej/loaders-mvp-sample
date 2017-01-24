@@ -15,6 +15,7 @@ import com.example.mvp_pokemon.data.models.PokemonModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +30,7 @@ import butterknife.OnClick;
 public class PokemonRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private ArrayList<PokemonModel> pokemonModels;
+    private List<PokemonModel> pokemonModels;
 
     private Comparator<PokemonModel> comparator;
 
@@ -60,23 +61,10 @@ public class PokemonRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         return pokemonModels.size();
     }
 
-    public void setPokemonList(ArrayList<PokemonModel> pokemonList) {
+    public void setPokemonList(List<PokemonModel> pokemonList) {
         this.pokemonModels = pokemonList;
         Collections.sort(pokemonModels, comparator);
         notifyDataSetChanged();
-    }
-
-    public void addPokemon(PokemonModel pokemonModel) {
-        int position = 0;
-        for (PokemonModel pokemon : pokemonModels) {
-            if (pokemonModel.getId() > pokemon.getId()) {
-                position++;
-            } else {
-                break;
-            }
-        }
-        pokemonModels.add(position, pokemonModel);
-        notifyItemInserted(position);
     }
 
     class PokemonHolder extends RecyclerView.ViewHolder {

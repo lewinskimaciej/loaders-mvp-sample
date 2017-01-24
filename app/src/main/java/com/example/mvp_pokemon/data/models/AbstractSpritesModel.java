@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 import io.requery.Entity;
+import io.requery.ForeignKey;
 import io.requery.Generated;
 import io.requery.Key;
 import io.requery.OneToOne;
@@ -21,9 +22,10 @@ public abstract class AbstractSpritesModel implements Parcelable, Persistable {
 
     @Key
     @Generated
-    protected int id;
+    long id;
 
-    @OneToOne(mappedBy = "spritesModel")
+    @ForeignKey
+    @OneToOne
     PokemonModel pokemonModel;
 
     @SerializedName("front_default")
