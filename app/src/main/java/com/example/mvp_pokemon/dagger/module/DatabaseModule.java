@@ -36,6 +36,7 @@ public final class DatabaseModule {
         if (BuildConfig.DEBUG) {
             // use this in development mode to drop and recreate the tables on every upgrade
             source.setTableCreationMode(TableCreationMode.DROP_CREATE);
+            source.setLoggingEnabled(true);
         }
         Configuration configuration = source.getConfiguration();
         dataStore = ReactiveSupport.toReactiveStore(
