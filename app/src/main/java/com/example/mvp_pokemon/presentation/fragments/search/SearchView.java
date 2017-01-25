@@ -6,7 +6,10 @@ import android.support.annotation.UiThread;
 public interface SearchView {
 
     void setPokemonNumber(long number);
+
     void setPokemonName(String name);
+
     void setPokemonSprite(String url);
+
     void setButtonEnabled(boolean enabled);
 }

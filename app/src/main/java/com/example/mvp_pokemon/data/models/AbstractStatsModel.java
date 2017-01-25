@@ -4,38 +4,38 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 import io.requery.CascadeAction;
 import io.requery.Entity;
 import io.requery.ForeignKey;
+import io.requery.Generated;
 import io.requery.Key;
-import io.requery.OneToMany;
+import io.requery.ManyToOne;
 import io.requery.OneToOne;
 import io.requery.Persistable;
 
 /**
- * Created on 13.01.2017.
+ * Created on 25.01.2017.
  *
  * @author Maciej Lewinski
  */
-
 @Entity
-public abstract class AbstractPokemonModel implements Parcelable, Persistable {
+public abstract class AbstractStatsModel implements Parcelable, Persistable {
 
     @Key
-    @SerializedName("id")
+    @Generated
     long id;
 
-    @SerializedName("name")
-    String name;
+    @SerializedName("effort")
+    int effort;
 
-    @OneToMany(mappedBy = "pokemonModel", cascade = {CascadeAction.DELETE, CascadeAction.SAVE})
-    @SerializedName("stats")
-    List<StatsModel> stats;
+    @SerializedName("base_stat")
+    int baseStat;
 
     @ForeignKey
     @OneToOne(cascade = {CascadeAction.DELETE, CascadeAction.SAVE})
-    @SerializedName("sprites")
-    SpritesModel sprites;
+    @SerializedName("stat")
+    StatModel statModel;
+
+    @ManyToOne(cascade = {CascadeAction.DELETE, CascadeAction.SAVE})
+    PokemonModel pokemonModel;
 }

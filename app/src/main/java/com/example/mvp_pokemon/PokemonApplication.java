@@ -4,10 +4,10 @@ import android.app.Application;
 import android.support.annotation.NonNull;
 
 import com.example.mvp_pokemon.dagger.component.ApplicationComponent;
+import com.example.mvp_pokemon.dagger.component.DaggerApplicationComponent;
 import com.example.mvp_pokemon.dagger.module.ApplicationModule;
 import com.example.mvp_pokemon.dagger.module.CommonModule;
 import com.example.mvp_pokemon.dagger.module.DatabaseModule;
-import com.example.mvp_pokemon.dagger.component.DaggerApplicationComponent;
 
 import timber.log.Timber;
 

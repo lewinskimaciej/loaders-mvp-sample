@@ -3,10 +3,10 @@ package com.example.mvp_pokemon.presentation.fragments.search;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.app.Fragment;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,20 +14,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mvp_pokemon.R;
-import com.example.mvp_pokemon.data.repositories.pokemon.PokemonRepository;
+import com.example.mvp_pokemon.dagger.component.ApplicationComponent;
 import com.example.mvp_pokemon.data.repositories.pokemon.PokemonRepositoryModule;
 import com.example.mvp_pokemon.presentation.BaseFragment;
 import com.example.mvp_pokemon.presentation.PresenterFactory;
-import com.example.mvp_pokemon.presentation.fragments.search.SearchPresenter;
-import com.example.mvp_pokemon.dagger.component.ApplicationComponent;
-import com.example.mvp_pokemon.presentation.fragments.search.dagger.SearchViewModule;
 import com.example.mvp_pokemon.presentation.fragments.search.dagger.DaggerSearchViewComponent;
+import com.example.mvp_pokemon.presentation.fragments.search.dagger.SearchViewModule;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import javax.inject.Inject;
 
 public final class SearchFragment extends BaseFragment<SearchPresenter, SearchView> implements SearchView {
 

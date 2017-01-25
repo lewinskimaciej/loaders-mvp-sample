@@ -10,10 +10,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.observers.DisposableMaybeObserver;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
-import timber.log.Timber;
 
 public final class ListPresenter extends BasePresenter<ListView> implements ListPresenterInterface {
 
@@ -36,7 +33,7 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
 
     private void setPokemonList(List<PokemonModel> pokemon) {
         if (pokemon != null) {
-            pokemonList =  pokemon;
+            pokemonList = pokemon;
             if (view != null) {
                 view.setAdapterData(pokemon);
             }

@@ -2,9 +2,8 @@ package com.example.mvp_pokemon.presentation.activities.main.dagger;
 
 import android.support.annotation.NonNull;
 
-import com.example.mvp_pokemon.presentation.activities.main.MainPresenter;
-import com.example.mvp_pokemon.presentation.activities.main.MainPresenterInterface;
 import com.example.mvp_pokemon.presentation.PresenterFactory;
+import com.example.mvp_pokemon.presentation.activities.main.MainPresenter;
 
 import dagger.Module;
 import dagger.Provides;

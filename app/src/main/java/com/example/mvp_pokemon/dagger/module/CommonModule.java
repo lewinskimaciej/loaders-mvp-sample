@@ -9,7 +9,6 @@ import com.example.mvp_pokemon.dagger.qualifier.CachedOkHttpClient;
 import com.example.mvp_pokemon.dagger.qualifier.CachedRetrofit;
 import com.example.mvp_pokemon.dagger.qualifier.NonCachedOkHttpClient;
 import com.example.mvp_pokemon.dagger.qualifier.NonCachedRetrofit;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;

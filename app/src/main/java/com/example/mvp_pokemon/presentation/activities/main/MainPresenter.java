@@ -1,9 +1,6 @@
 package com.example.mvp_pokemon.presentation.activities.main;
 
-import android.support.annotation.NonNull;
-
 import com.example.mvp_pokemon.presentation.BasePresenter;
-import com.example.mvp_pokemon.presentation.activities.main.MainView;
 
 import javax.inject.Inject;
 

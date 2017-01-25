@@ -8,10 +8,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.mvp_pokemon.PokemonApplication;
-import com.example.mvp_pokemon.presentation.PresenterFactory;
-import com.example.mvp_pokemon.presentation.PresenterLoader;
 import com.example.mvp_pokemon.dagger.component.ApplicationComponent;
-import com.example.mvp_pokemon.presentation.BasePresenterInterface;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;

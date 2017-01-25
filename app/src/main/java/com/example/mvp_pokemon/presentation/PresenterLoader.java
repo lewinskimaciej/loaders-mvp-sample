@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.Loader;
 
-import com.example.mvp_pokemon.presentation.BasePresenterInterface;
-
 /**
  * Loader that implements the loading of a Presenter, made to persist on activity recreation
  */

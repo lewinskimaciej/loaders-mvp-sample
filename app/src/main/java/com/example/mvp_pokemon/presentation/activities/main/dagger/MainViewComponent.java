@@ -1,8 +1,8 @@
 package com.example.mvp_pokemon.presentation.activities.main.dagger;
 
-import com.example.mvp_pokemon.presentation.activities.main.MainActivity;
-import com.example.mvp_pokemon.dagger.scope.ActivityScope;
 import com.example.mvp_pokemon.dagger.component.ApplicationComponent;
+import com.example.mvp_pokemon.dagger.scope.ActivityScope;
+import com.example.mvp_pokemon.presentation.activities.main.MainActivity;
 
 import dagger.Component;
 
