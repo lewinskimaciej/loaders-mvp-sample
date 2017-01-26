@@ -30,7 +30,7 @@ public abstract class AbstractPokemonModel implements Parcelable, Persistable {
     @SerializedName("name")
     String name;
 
-    @OneToMany(cascade = {CascadeAction.DELETE, CascadeAction.SAVE})
+    @OneToMany(mappedBy = "pokemonModel", cascade = {CascadeAction.DELETE, CascadeAction.SAVE})
     @SerializedName("stats")
     List<StatsModel> stats;
 
