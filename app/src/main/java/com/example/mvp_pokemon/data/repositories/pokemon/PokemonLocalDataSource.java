@@ -1,9 +1,10 @@
 package com.example.mvp_pokemon.data.repositories.pokemon;
 
 import com.example.mvp_pokemon.data.models.PokemonModel;
-import com.example.mvp_pokemon.data.models.SpritesModel;
+import com.example.mvp_pokemon.data.models.StatsModel;
 import com.example.mvp_pokemon.data.repositories.pokemon.interfaces.PokemonDataSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,31 +29,32 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
 
     @Override
     public Observable<PokemonModel> getPokemon(int number) {
-        return null;
+        return database.findByKey(PokemonModel.class, number)
+                .toObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
     public void savePokemon(final PokemonModel pokemonModel) {
-        database.insert(pokemonModel.getSprites())
-                .subscribeOn(Schedulers.computation())
-                .observeOn(Schedulers.computation())
-                .subscribe(new DisposableSingleObserver<SpritesModel>() {
-                    @Override
-                    public void onSuccess(SpritesModel value) {
-                        database.insert(pokemonModel)
-                                .subscribeOn(Schedulers.computation())
-                                .observeOn(Schedulers.computation())
-                                .subscribe(new DisposableSingleObserver<PokemonModel>() {
-                                    @Override
-                                    public void onSuccess(PokemonModel value) {
-                                        Timber.d("inserted");
-                                    }
+        pokemonModel.setSprites(pokemonModel.getSprites());
 
-                                    @Override
-                                    public void onError(Throwable e) {
-                                        Timber.d(e, "not inserted");
-                                    }
-                                });
+        /** not working for some reason for OneToMany **/
+        List<StatsModel> tempList = new ArrayList<>(pokemonModel.getStats());
+        pokemonModel.getStats().clear();
+
+        for (StatsModel statsModel : tempList) {
+            statsModel.setBaseStat(statsModel.getBaseStat());
+            pokemonModel.getStats().add(statsModel);
+        }
+
+        database.upsert(pokemonModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSingleObserver<PokemonModel>() {
+                    @Override
+                    public void onSuccess(PokemonModel value) {
+                        Timber.d("onSuccess");
                     }
 
                     @Override
@@ -60,8 +62,6 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
                         Timber.d("onError");
                     }
                 });
-
-
     }
 
     @Override

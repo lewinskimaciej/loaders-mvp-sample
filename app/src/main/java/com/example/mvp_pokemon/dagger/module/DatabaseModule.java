@@ -35,7 +35,7 @@ public final class DatabaseModule {
         ReactiveEntityStore<Persistable> dataStore;
         if (BuildConfig.DEBUG) {
             // use this in development mode to drop and recreate the tables on every upgrade
-            source.setTableCreationMode(TableCreationMode.CREATE_NOT_EXISTS);
+            source.setTableCreationMode(TableCreationMode.DROP_CREATE);
             source.setLoggingEnabled(true);
         }
         Configuration configuration = source.getConfiguration();
