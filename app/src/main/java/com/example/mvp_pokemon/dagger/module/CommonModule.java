@@ -9,15 +9,9 @@ import com.example.mvp_pokemon.dagger.qualifier.CachedOkHttpClient;
 import com.example.mvp_pokemon.dagger.qualifier.CachedRetrofit;
 import com.example.mvp_pokemon.dagger.qualifier.NonCachedOkHttpClient;
 import com.example.mvp_pokemon.dagger.qualifier.NonCachedRetrofit;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import org.joda.time.DateTime;
@@ -37,7 +31,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 /**
  * Created on 22.12.2016.
@@ -91,17 +85,13 @@ public final class CommonModule {
 
     @Provides
     @Singleton
-    Gson provideGson(JsonSerializer<DateTime> dateTimeJsonSerializer, JsonDeserializer<DateTime> dateTimeJsonDeserializer) {
-        return new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                .registerTypeAdapter(
-                        DateTime.class,
-                        dateTimeJsonSerializer
-                )
-                .registerTypeAdapter(
-                        DateTime.class,
-                        dateTimeJsonDeserializer
-                ).create();
+    ObjectMapper provideObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JodaModule())
+                .writerWithDefaultPrettyPrinter();
+        objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return objectMapper;
     }
 
     @Provides
@@ -114,32 +104,10 @@ public final class CommonModule {
 
     @Provides
     @Singleton
-    JsonSerializer<DateTime> provideDateTimeJsonSerializer() {
-        return new JsonSerializer<DateTime>() {
-            @Override
-            public JsonElement serialize(DateTime src, Type typeOfSrc, JsonSerializationContext context) {
-                return new JsonPrimitive(src.toString());
-            }
-        };
-    }
-
-    @Provides
-    @Singleton
-    JsonDeserializer<DateTime> provideDateTimeJsonDeserializer() {
-        return new JsonDeserializer<DateTime>() {
-            @Override
-            public DateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return new DateTime(json.getAsJsonPrimitive().getAsString(), DateTimeZone.UTC);
-            }
-        };
-    }
-
-    @Provides
-    @Singleton
     @NonCachedRetrofit
-    Retrofit provideNonCachedRetrofit(Gson gson, @NonCachedOkHttpClient OkHttpClient okHttpClient) {
+    Retrofit provideNonCachedRetrofit(ObjectMapper objectMapper, @NonCachedOkHttpClient OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(baseUrl)
                 .client(okHttpClient)
@@ -149,9 +117,9 @@ public final class CommonModule {
     @Provides
     @Singleton
     @CachedRetrofit
-    Retrofit provideCachedRetrofit(Gson gson, @CachedOkHttpClient OkHttpClient okHttpClient) {
+    Retrofit provideCachedRetrofit(ObjectMapper objectMapper, @CachedOkHttpClient OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(baseUrl)
                 .client(okHttpClient)

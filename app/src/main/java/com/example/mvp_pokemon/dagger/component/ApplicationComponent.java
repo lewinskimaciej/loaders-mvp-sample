@@ -13,6 +13,7 @@ import com.example.mvp_pokemon.dagger.qualifier.CachedOkHttpClient;
 import com.example.mvp_pokemon.dagger.qualifier.CachedRetrofit;
 import com.example.mvp_pokemon.dagger.qualifier.NonCachedOkHttpClient;
 import com.example.mvp_pokemon.dagger.qualifier.NonCachedRetrofit;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import javax.inject.Singleton;
@@ -39,7 +40,7 @@ public interface ApplicationComponent {
 
     Cache cache();
 
-    Gson gson();
+    ObjectMapper objectMapper();
 
     @AuthenticationInterceptor
     Interceptor authenticationInterceptor();

@@ -48,6 +48,11 @@ android {
             events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
 }
 
 // Dependency versions are defined in the top level build.gradle file. This helps keeping track of
@@ -71,6 +76,7 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofitVersion"
     compile "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rootProject.ext.retrofit2RxJava2AdapterVersion"
     compile "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofitVersion"
+    compile "com.squareup.retrofit2:converter-jackson:$rootProject.ext.retrofitVersion"
                                                                                                             
     //
     // ReactiveX
@@ -93,8 +99,11 @@ dependencies {
     compile "com.birbit:android-priority-jobqueue:$rootProject.ext.jobQueueVersion"
                                                                                                           
     //
-    // Gson
-    compile "com.google.code.gson:gson:$rootProject.ext.gsonVersion"
+    // Jackson
+    compile "com.fasterxml.jackson.core:jackson-core:$rootProject.ext.jacksonVersion"
+    compile "com.fasterxml.jackson.core:jackson-databind:$rootProject.ext.jacksonVersion"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$rootProject.ext.jacksonVersion"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:$rootProject.ext.jacksonVersion"
 
     //
     // JodaTime

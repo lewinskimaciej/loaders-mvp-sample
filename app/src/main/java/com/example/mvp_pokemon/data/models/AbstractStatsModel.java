@@ -2,7 +2,7 @@ package com.example.mvp_pokemon.data.models;
 
 import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.requery.CascadeAction;
 import io.requery.Entity;
@@ -25,15 +25,15 @@ public abstract class AbstractStatsModel implements Parcelable, Persistable {
     @Generated
     long id;
 
-    @SerializedName("effort")
+    @JsonProperty("effort")
     int effort;
 
-    @SerializedName("base_stat")
+    @JsonProperty("base_stat")
     int baseStat;
 
     @ForeignKey
     @OneToOne(cascade = {CascadeAction.DELETE, CascadeAction.SAVE})
-    @SerializedName("stat")
+    @JsonProperty("stat")
     StatModel statModel;
 
     @ManyToOne(cascade = {CascadeAction.DELETE, CascadeAction.SAVE})

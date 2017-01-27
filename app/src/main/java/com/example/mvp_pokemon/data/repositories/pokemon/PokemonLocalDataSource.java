@@ -37,7 +37,6 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
 
     @Override
     public void savePokemon(final PokemonModel pokemonModel) {
-        pokemonModel.setSprites(pokemonModel.getSprites());
         List<StatsModel> tempList = new ArrayList<>(pokemonModel.getStats());
 
         database.upsert(pokemonModel)
@@ -48,9 +47,7 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
                     public void onSuccess(PokemonModel value) {
                         Timber.d("onSuccess");
 
-                        // stil not working
                         for (StatsModel statsModel : tempList) {
-                            statsModel.setBaseStat(statsModel.getBaseStat());
                             value.getStats().add(statsModel);
                         }
 

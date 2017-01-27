@@ -57,7 +57,7 @@ ext {
     retrofitVersion = '2.1.0'
     okHttpVersion = '3.5.0'
     okHttpLoggerVersion = '3.5.0'
-    gsonVersion = '2.8.0'
+    jacksonVersion = '2.8.6'
     //
     glideVersion = '3.7.0'
     requeryVersion = '1.1.1'
