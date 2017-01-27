@@ -6,14 +6,19 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.example.mvp_pokemon.PokemonApplication;
+import com.example.mvp_pokemon.R;
 import com.example.mvp_pokemon.dagger.component.ApplicationComponent;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class BaseActivity<P extends BasePresenterInterface<V>, V> extends AppCompatActivity implements LoaderManager.LoaderCallbacks<P> {
+public abstract class BaseActivity<P extends BasePresenterInterface<V>, V>
+        extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<P>,
+        HttpExceptionResolutionInterface {
 
     /**
      * Common counter for views (fragments and activities) that is used to generate loader ids
@@ -125,4 +130,19 @@ public abstract class BaseActivity<P extends BasePresenterInterface<V>, V> exten
      * @param applicationComponent the app component
      */
     protected abstract void setupComponent(@NonNull ApplicationComponent applicationComponent);
+
+    @Override
+    public void onInternalServerError() {
+        Toast.makeText(this, getString(R.string.internal_server_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNotFound() {
+        Toast.makeText(this, getString(R.string.not_found_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onGenericError() {
+        Toast.makeText(this, getString(R.string.generic_error), Toast.LENGTH_SHORT).show();
+    }
 }

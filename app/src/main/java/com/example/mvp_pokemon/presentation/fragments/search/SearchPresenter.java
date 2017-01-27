@@ -4,13 +4,11 @@ import com.example.mvp_pokemon.dagger.qualifier.Repository;
 import com.example.mvp_pokemon.data.models.PokemonModel;
 import com.example.mvp_pokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
 import com.example.mvp_pokemon.presentation.BasePresenter;
-
+import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public final class SearchPresenter extends BasePresenter<SearchView> implements SearchPresenterInterface {
@@ -67,6 +65,19 @@ public final class SearchPresenter extends BasePresenter<SearchView> implements 
                         public void onError(Throwable e) {
                             Timber.e(e, "error");
                             view.setButtonEnabled(true);
+                            if (e instanceof HttpException) {
+                                switch (((HttpException) e).code()) {
+                                    case 404:
+                                        onNotFound();
+                                        break;
+                                    case 500:
+                                        onInternalServerError();
+                                        break;
+                                    default:
+                                        onGenericError();
+                                        break;
+                                }
+                            }
                         }
 
                         @Override

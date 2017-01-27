@@ -3,4 +3,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="default_pokemon_number_input">1</string>
     <string name="get_pokemon_button">GET POKEMON</string>
+    <string name="internal_server_error">Internal server error</string>
+    <string name="not_found_error">Not found</string>
+    <string name="generic_error">Something went wrong</string>
 </resources>

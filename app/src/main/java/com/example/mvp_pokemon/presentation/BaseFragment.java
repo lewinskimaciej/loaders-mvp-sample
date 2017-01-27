@@ -6,13 +6,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.widget.Toast;
 
 import com.example.mvp_pokemon.PokemonApplication;
+import com.example.mvp_pokemon.R;
 import com.example.mvp_pokemon.dagger.component.ApplicationComponent;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class BaseFragment<P extends BasePresenterInterface<V>, V> extends Fragment implements LoaderManager.LoaderCallbacks<P> {
+public abstract class BaseFragment<P extends BasePresenterInterface<V>, V>
+        extends Fragment
+        implements LoaderManager.LoaderCallbacks<P>, HttpExceptionResolutionInterface {
 
     private final static String RECREATION_SAVED_STATE = "recreation_state";
     private final static String LOADER_ID_SAVED_STATE = "loader_id_state";
@@ -125,4 +129,19 @@ public abstract class BaseFragment<P extends BasePresenterInterface<V>, V> exten
      * @param applicationComponent the app component
      */
     protected abstract void setupComponent(@NonNull ApplicationComponent applicationComponent);
+
+    @Override
+    public void onInternalServerError() {
+        Toast.makeText(getActivity(), getString(R.string.internal_server_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNotFound() {
+        Toast.makeText(getActivity(), getString(R.string.not_found_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onGenericError() {
+        Toast.makeText(getActivity(), getString(R.string.generic_error), Toast.LENGTH_SHORT).show();
+    }
 }
