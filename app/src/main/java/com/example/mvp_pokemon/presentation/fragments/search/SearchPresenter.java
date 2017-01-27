@@ -5,9 +5,12 @@ import com.example.mvp_pokemon.data.models.PokemonModel;
 import com.example.mvp_pokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
 import com.example.mvp_pokemon.presentation.BasePresenter;
 
+
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public final class SearchPresenter extends BasePresenter<SearchView> implements SearchPresenterInterface {

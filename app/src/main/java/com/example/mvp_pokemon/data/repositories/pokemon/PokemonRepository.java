@@ -32,7 +32,8 @@ public final class PokemonRepository implements PokemonRepositoryInterface {
                 .map(pokemonModel -> {
                     savePokemon(pokemonModel);
                     return pokemonModel;
-                });
+                })
+                .mergeWith(pokemonLocalDataSource.getPokemon(number));
     }
 
     @Override
@@ -44,4 +45,5 @@ public final class PokemonRepository implements PokemonRepositoryInterface {
     public Single<List<PokemonModel>> getAllLocalPokemon() {
         return pokemonLocalDataSource.getAllLocalPokemon();
     }
+
 }
