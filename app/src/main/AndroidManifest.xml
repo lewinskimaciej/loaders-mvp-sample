@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mvp_pokemon">
+    package="com.example.mvppokemon">
 
     <application
         android:allowBackup="false"
-        android:name=".PokemonApplication"
+        android:name="com.example.mvppokemon.PokemonApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".presentation.activities.main.MainActivity"
+            android:name="com.example.mvppokemon.presentation.activities.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
