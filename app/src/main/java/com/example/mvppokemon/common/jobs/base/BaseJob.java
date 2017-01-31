@@ -17,7 +17,11 @@ public class BaseJob extends Job {
     private int retryMaxCount = JobParameters.RETRY_MAX_COUNT;
     private long delay = JobParameters.RETRY_DELAY;
 
-    public BaseJob(Params params) {
+    public BaseJob() {
+        super(new Params(1));
+    }
+
+    BaseJob(Params params) {
         super(params);
     }
 
