@@ -62,7 +62,7 @@ public class PokemonRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     public void setPokemonList(List<PokemonModel> pokemonList) {
-        this.pokemonModels = pokemonList;
+        this.pokemonModels = new ArrayList<>(pokemonList);
         Collections.sort(pokemonModels, comparator);
         notifyDataSetChanged();
     }
