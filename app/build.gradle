@@ -1,6 +1,10 @@
+plugins {
+    id "org.sonarqube" version "1.2"
+}
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+apply from: '../sonarqube.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -77,27 +81,27 @@ dependencies {
     compile "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rootProject.ext.retrofit2RxJava2AdapterVersion"
     compile "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofitVersion"
     compile "com.squareup.retrofit2:converter-jackson:$rootProject.ext.retrofitVersion"
-                                                                                                            
+
     //
     // ReactiveX
     compile "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxAndroidVersion"
     compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJava2Version"
-                                                                                                          
+
     //
     // ButterKnife
     compile "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
     apt "com.jakewharton:butterknife-compiler:$rootProject.ext.butterKnifeVersion"
-                                                                                                          
+
     //
     // Dagger 2
     compile "com.google.dagger:dagger:$rootProject.ext.daggerVersion"
-    apt  "com.google.dagger:dagger-compiler:$rootProject.ext.daggerVersion"
+    apt "com.google.dagger:dagger-compiler:$rootProject.ext.daggerVersion"
     provided "javax.annotation:jsr250-api:$rootProject.ext.jsr250Version"
-                                                                                                          
+
     //
     // JobQueue
     compile "com.birbit:android-priority-jobqueue:$rootProject.ext.jobQueueVersion"
-                                                                                                          
+
     //
     // Jackson
     compile "com.fasterxml.jackson.core:jackson-core:$rootProject.ext.jacksonVersion"
@@ -107,12 +111,12 @@ dependencies {
 
     //
     // JodaTime
-    compile "joda-time:joda-time:$rootProject.ext.jodaTimeVersion"    
-                                                                                                          
+    compile "joda-time:joda-time:$rootProject.ext.jodaTimeVersion"
+
     //
     // Logging
     compile "com.jakewharton.timber:timber:$rootProject.ext.timberVersion"
-                                                                                                          
+
     //
     // Espresso idling resource
     compile "com.android.support.test.espresso:espresso-idling-resource:$rootProject.ext.espressoVersion"
@@ -132,23 +136,23 @@ dependencies {
     //                                       TESTING STUFF                                        //
     //                                                                                            //
     ////////////////////////////////////////////////////////////////////////////////////////////////
-                                                                                                          
+
     //
     // Dependencies for local unit tests
     testCompile "junit:junit:$rootProject.ext.junitVersion"
     testCompile "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"
     testCompile "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrestVersion"
-                                                                                                          
+
     //
     // Android Testing Support Library's runner and rules
     androidTestCompile "com.android.support.test:runner:$rootProject.ext.runnerVersion"
     androidTestCompile "com.android.support.test:rules:$rootProject.ext.runnerVersion"
-                                                                                                          
+
     //
     // Dependencies for Android unit tests
     androidTestCompile "junit:junit:$rootProject.ext.junitVersion"
     androidTestCompile "org.mockito:mockito-core:$rootProject.ext.mockitoVersion"
-                                                                                                          
+
     //
     // Espresso UI Testing
     androidTestCompile("com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoVersion", {
@@ -156,7 +160,7 @@ dependencies {
     })
     androidTestCompile "com.android.support.test.espresso:espresso-contrib:$rootProject.ext.espressoVersion"
     androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.ext.espressoVersion"
-                                                                                                          
+
     //
     // Resolve conflicts between main and test APK:
     androidTestCompile "com.android.support:support-annotations:$rootProject.ext.supportLibraryVersion"
@@ -164,7 +168,7 @@ dependencies {
     androidTestCompile "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
     androidTestCompile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
     androidTestCompile "com.android.support:design:$rootProject.ext.supportLibraryVersion"
-                                                                                                          
+
     androidTestCompile "com.google.dexmaker:dexmaker:$rootProject.ext.dexmakerVersion"
     androidTestCompile "com.google.dexmaker:dexmaker-mockito:$rootProject.ext.dexmakerVersion"
 }

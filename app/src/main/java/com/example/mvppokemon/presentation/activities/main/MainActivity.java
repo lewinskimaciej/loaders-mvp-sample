@@ -34,6 +34,7 @@ public final class MainActivity extends BaseActivity<MainPresenter, MainView> im
 
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
+
     @Inject
     PresenterFactory<MainPresenter> presenterFactory;
     // Your presenter is available using the presenter variable
@@ -54,7 +55,7 @@ public final class MainActivity extends BaseActivity<MainPresenter, MainView> im
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                // nothing
             }
 
             @Override
@@ -66,7 +67,7 @@ public final class MainActivity extends BaseActivity<MainPresenter, MainView> im
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                // nothing
             }
         });
     }
@@ -91,11 +92,4 @@ public final class MainActivity extends BaseActivity<MainPresenter, MainView> im
     protected PresenterFactory<MainPresenter> getPresenterFactory() {
         return presenterFactory;
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // presenter variable is available here
-    }
-
 }

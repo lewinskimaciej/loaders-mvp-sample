@@ -29,7 +29,8 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 @Module
 public final class CommonModule {
 
-    public static final int CACHE_SIZE = 10_485_760;    // 10 * 1024 * 1024
+    // 10 * 1024 * 1024
+    public static final int CACHE_SIZE = 10_485_760;
 
     private final String baseUrl;
     private final String apiKey;

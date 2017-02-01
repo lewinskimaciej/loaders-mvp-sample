@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mvppokemon.R;
+import com.example.mvppokemon.common.dictionaries.HttpCode;
 import com.example.mvppokemon.dagger.component.ApplicationComponent;
 import com.example.mvppokemon.data.repositories.pokemon.PokemonRepositoryModule;
 import com.example.mvppokemon.presentation.BaseFragment;
@@ -68,23 +69,6 @@ public final class SearchFragment extends BaseFragment<SearchPresenter, SearchVi
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        // Your code here
-        // Do not call presenter from here, it will be null! Wait for onStart
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
 import com.example.mvppokemon.presentation.BasePresenter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -13,8 +12,6 @@ import javax.inject.Inject;
 import io.reactivex.observers.DisposableSingleObserver;
 
 public final class ListPresenter extends BasePresenter<ListView> implements ListPresenterInterface {
-
-    List<PokemonModel> pokemonList = new ArrayList<>();
 
     // The view is available using the view variable
     PokemonRepositoryInterface pokemonRepository;
@@ -33,7 +30,6 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
 
     private void setPokemonList(List<PokemonModel> pokemon) {
         if (pokemon != null) {
-            pokemonList = pokemon;
             if (view != null) {
                 view.setAdapterData(pokemon);
             }

@@ -45,7 +45,6 @@ public final class ListFragment extends BaseFragment<ListPresenter, ListView> im
     PresenterFactory<ListPresenter> presenterFactory;
 
     private PokemonRecyclerViewAdapter pokemonRecyclerViewAdapter;
-    private Context context;
 
     // Your presenter is available using the presenter variable
 
@@ -68,7 +67,7 @@ public final class ListFragment extends BaseFragment<ListPresenter, ListView> im
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ButterKnife.bind(this, view);
 
-        context = getActivity();
+        Context context = getActivity();
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             if (presenter != null) {
@@ -82,23 +81,6 @@ public final class ListFragment extends BaseFragment<ListPresenter, ListView> im
         recyclerView.setLayoutManager(linearLayoutManager);
 
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        // Your code here
-        // Do not call presenter from here, it will be null! Wait for onStart
     }
 
     @Override

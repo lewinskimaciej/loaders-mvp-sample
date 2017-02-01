@@ -1,5 +1,6 @@
 package com.example.mvppokemon.presentation.fragments.search;
 
+import com.example.mvppokemon.common.dictionaries.HttpCode;
 import com.example.mvppokemon.dagger.qualifier.Repository;
 import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
@@ -67,10 +68,10 @@ public final class SearchPresenter extends BasePresenter<SearchView> implements 
                             view.setButtonEnabled(true);
                             if (e instanceof HttpException) {
                                 switch (((HttpException) e).code()) {
-                                    case 404:
+                                    case HttpCode.NOT_FOUND:
                                         onNotFound();
                                         break;
-                                    case 500:
+                                    case HttpCode.INTERNAL_SERVER_ERROR:
                                         onInternalServerError();
                                         break;
                                     default:

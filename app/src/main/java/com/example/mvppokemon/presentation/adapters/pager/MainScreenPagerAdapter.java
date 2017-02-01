@@ -13,8 +13,9 @@ import com.example.mvppokemon.presentation.fragments.search.SearchFragment;
  * @author Maciej Lewinski
  */
 public class MainScreenPagerAdapter extends FragmentPagerAdapter {
+
     @SuppressWarnings("FieldCanBeLocal")
-    private static int NUMBER_OF_ITEMS = 2;
+    private static final int NUMBER_OF_ITEMS = 2;
 
     public MainScreenPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);

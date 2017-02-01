@@ -5,10 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.mvppokemon.R;
 import com.example.mvppokemon.data.models.PokemonModel;
 
@@ -16,10 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created on 12.01.2017.
@@ -44,7 +37,7 @@ public class PokemonRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_pokemon, parent, false);
-        return new PokemonHolder(view);
+        return new PokemonHolder(view, context);
     }
 
     @Override
@@ -67,38 +60,4 @@ public class PokemonRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         notifyDataSetChanged();
     }
 
-    class PokemonHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.pokemon_number)
-        TextView pokemonNumber;
-
-        @BindView(R.id.pokemon_sprite)
-        ImageView pokemonSprite;
-
-        @BindView(R.id.pokemon_name)
-        TextView pokemonName;
-
-        PokemonModel pokemonModel;
-
-        PokemonHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        @OnClick(R.id.show_pokemon)
-        public void showPokemon() {
-            // TODO: intent to start PokemonActivity
-        }
-
-        public void setPokemon(PokemonModel pokemon) {
-            if (pokemon != null) {
-                pokemonModel = pokemon;
-                pokemonNumber.setText(String.valueOf(pokemonModel.getId()));
-                pokemonName.setText(pokemonModel.getName());
-                Glide.with(context)
-                        .load(pokemonModel.getSprites().getFrontDefault())
-                        .into(pokemonSprite);
-            }
-        }
-    }
 }
