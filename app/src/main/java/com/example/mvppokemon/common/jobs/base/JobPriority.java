@@ -1,10 +1,6 @@
 package com.example.mvppokemon.common.jobs.base;
 
-/**
- * Created on 05.01.2017.
- *
- * @author Sławomir Onyszko
- */
+
 public final class JobPriority {
 
     public static final int LOW_LEVEL_3 = 1;

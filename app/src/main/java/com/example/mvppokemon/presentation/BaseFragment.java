@@ -18,8 +18,8 @@ public abstract class BaseFragment<P extends BasePresenterInterface<V>, V>
         extends Fragment
         implements LoaderManager.LoaderCallbacks<P>, HttpExceptionResolutionInterface {
 
-    private final static String RECREATION_SAVED_STATE = "recreation_state";
-    private final static String LOADER_ID_SAVED_STATE = "loader_id_state";
+    private static final String RECREATION_SAVED_STATE = "recreation_state";
+    private static final String LOADER_ID_SAVED_STATE = "loader_id_state";
     /**
      * Do we need to call {@link #doStart()} from the {@link #onLoadFinished(Loader, BasePresenterInterface)} method.
      * Will be true if presenter wasn't loaded when {@link #onStart()} is reached

@@ -7,18 +7,14 @@ import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
 
-/**
- * Created on 05.01.2017.
- *
- * @author Sławomir Onyszko
- */
+
 public class BaseJob extends Job {
 
     private int retryMaxCount = JobParameters.RETRY_MAX_COUNT;
     private long delay = JobParameters.RETRY_DELAY;
 
     public BaseJob() {
-        super(new Params(1));
+        super(new Params(JobPriority.MEDIUM_LEVEL_1));
     }
 
     BaseJob(Params params) {
@@ -27,17 +23,17 @@ public class BaseJob extends Job {
 
     @Override
     public void onAdded() {
-
+        // blank override
     }
 
     @Override
     public void onRun() throws Throwable {
-
+        // blank override
     }
 
     @Override
     protected void onCancel(int cancelReason, @Nullable Throwable throwable) {
-
+        // blank override
     }
 
     @Override

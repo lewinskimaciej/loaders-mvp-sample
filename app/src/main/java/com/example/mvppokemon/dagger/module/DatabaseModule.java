@@ -21,17 +21,15 @@ import io.requery.sql.TableCreationMode;
 public final class DatabaseModule {
 
     private final int schemaVersion;
-    private final String schemaName;
 
-    public DatabaseModule(int schemaVersion, String schemaName) {
+    public DatabaseModule(int schemaVersion) {
         this.schemaVersion = schemaVersion;
-        this.schemaName = schemaName;
     }
 
     @Provides
     @Singleton
     ReactiveEntityStore<Persistable> providesDatabase(Application application) {
-        DatabaseSource source = new DatabaseSource(application, Models.DEFAULT, 1);
+        DatabaseSource source = new DatabaseSource(application, Models.DEFAULT, schemaVersion);
         ReactiveEntityStore<Persistable> dataStore;
         if (BuildConfig.DEBUG) {
             // use this in development mode to drop and recreate the tables on every upgrade

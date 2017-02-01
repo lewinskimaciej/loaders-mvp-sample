@@ -45,31 +45,35 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
                 .subscribe(new DisposableSingleObserver<PokemonModel>() {
                     @Override
                     public void onSuccess(PokemonModel value) {
-                        Timber.d("onSuccess");
+                        Timber.d("onSuccess inserting initial");
 
                         for (StatsModel statsModel : tempList) {
                             value.getStats().add(statsModel);
                         }
 
-                        database.update(value)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new DisposableSingleObserver<PokemonModel>() {
-                                    @Override
-                                    public void onSuccess(PokemonModel value) {
-                                        Timber.d("onSuccess");
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable e) {
-                                        Timber.d("onError");
-                                    }
-                                });
+                        updateAfterInserting(value);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Timber.d("onError");
+                        Timber.d("onError inserting initial");
+                    }
+                });
+    }
+
+    private void updateAfterInserting(PokemonModel value) {
+        database.update(value)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSingleObserver<PokemonModel>() {
+                    @Override
+                    public void onSuccess(PokemonModel value) {
+                        Timber.d("onSuccess fully inserted and updated");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.d("onError updating after insert");
                     }
                 });
     }

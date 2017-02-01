@@ -24,8 +24,8 @@ public abstract class BaseActivity<P extends BasePresenterInterface<V>, V>
      * Common counter for views (fragments and activities) that is used to generate loader ids
      */
     public static final AtomicInteger viewCounter = new AtomicInteger(0);
-    private final static String RECREATION_SAVED_STATE = "recreation_state";
-    private final static String LOADER_ID_SAVED_STATE = "loader_id_state";
+    private static final String RECREATION_SAVED_STATE = "recreation_state";
+    private static final String LOADER_ID_SAVED_STATE = "loader_id_state";
     /**
      * Do we need to call {@link #doStart()} from the {@link #onLoadFinished(Loader, BasePresenterInterface)} method.
      * Will be true if presenter wasn't loaded when {@link #onStart()} is reached

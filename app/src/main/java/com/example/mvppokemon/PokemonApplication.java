@@ -20,7 +20,7 @@ public final class PokemonApplication extends Application {
         super.onCreate();
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
-                .databaseModule(new DatabaseModule(1, "mvp-pokemon-database"))
+                .databaseModule(new DatabaseModule(1))
                 .commonModule(new CommonModule("http://pokeapi.co/api/v2/", ""))
                 .build();
 

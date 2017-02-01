@@ -14,8 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
-import java.io.IOException;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -24,19 +22,14 @@ import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
-/**
- * Created on 22.12.2016.
- *
- * @author Sławomir Onyszko
- */
-@SuppressWarnings("Convert2Lambda")
 @Module
 public final class CommonModule {
+
+    public static final int CACHE_SIZE = 10_485_760;    // 10 * 1024 * 1024
 
     private final String baseUrl;
     private final String apiKey;
@@ -55,7 +48,7 @@ public final class CommonModule {
     @Provides
     @Singleton
     Cache provideOkHttpCache(Application application) {
-        int cacheSize = 10 * 1024 * 1024;
+        int cacheSize = CACHE_SIZE;
         return new Cache(application.getCacheDir(), cacheSize);
     }
 
@@ -126,28 +119,25 @@ public final class CommonModule {
     @Singleton
     @AuthenticationInterceptor
     Interceptor provideAuthenticationInterceptor(SharedPreferences sharedPreferences) {
-        return new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request original = chain.request();
+        return chain -> {
+            Request original = chain.request();
 
-                Request.Builder requestBuilder = original.newBuilder()
-                        .header("Accept", "application/json")
-                        .method(original.method(), original.body());
+            Request.Builder requestBuilder = original.newBuilder()
+                    .header("Accept", "application/json")
+                    .method(original.method(), original.body());
 
-                String userToken = sharedPreferences.getString("UserToken", null);
+            String userToken = sharedPreferences.getString("UserToken", null);
 
-                if (userToken != null && !userToken.isEmpty()) {
-                    requestBuilder.header("Authorization", "Token token=" + userToken);
-                }
-
-                if (apiKey != null && !apiKey.isEmpty()) {
-                    requestBuilder.header("X-Api-Key", apiKey);
-                }
-
-                Request request = requestBuilder.build();
-                return chain.proceed(request);
+            if (userToken != null && !userToken.isEmpty()) {
+                requestBuilder.header("Authorization", "Token token=" + userToken);
             }
+
+            if (apiKey != null && !apiKey.isEmpty()) {
+                requestBuilder.header("X-Api-Key", apiKey);
+            }
+
+            Request request = requestBuilder.build();
+            return chain.proceed(request);
         };
     }
 

@@ -31,7 +31,7 @@ public interface ApplicationComponent {
 
     Context context();
 
-    PokemonApplication PokemonApplication();
+    PokemonApplication pokemonApplication();
 
     Application application();
 

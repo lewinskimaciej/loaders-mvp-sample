@@ -29,12 +29,18 @@ public final class PokemonRemoteDataSource implements PokemonDataSource {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * @deprecated (Operation not available in remote data source)
+     */
     @Deprecated
     @Override
     public void savePokemon(PokemonModel pokemonModel) {
         // cannot save in remote
     }
 
+    /**
+     * @deprecated (Operation not available in remote data source)
+     */
     @Deprecated
     @Override
     public Single<List<PokemonModel>> getAllLocalPokemon() {
