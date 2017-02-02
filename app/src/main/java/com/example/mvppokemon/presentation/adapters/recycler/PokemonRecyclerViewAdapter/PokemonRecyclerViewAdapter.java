@@ -1,17 +1,16 @@
-package com.example.mvppokemon.presentation.adapters.recycler;
+package com.example.mvppokemon.presentation.adapters.recycler.PokemonRecyclerViewAdapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.example.mvppokemon.R;
 import com.example.mvppokemon.data.models.PokemonModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -23,21 +22,18 @@ import java.util.List;
 public class PokemonRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private List<PokemonModel> pokemonModels;
 
-    private Comparator<PokemonModel> comparator;
+    private List<PokemonModel> pokemonModels;
 
     public PokemonRecyclerViewAdapter(Context context) {
         this.context = context;
         pokemonModels = new ArrayList<>();
-
-        comparator = (pokemonModel, t1) -> Long.compare(pokemonModel.getId(), t1.getId());
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_pokemon, parent, false);
-        return new PokemonHolder(view, context);
+        return new PokemonHolder(context, view);
     }
 
     @Override
@@ -56,8 +52,6 @@ public class PokemonRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public void setPokemonList(List<PokemonModel> pokemonList) {
         this.pokemonModels = new ArrayList<>(pokemonList);
-        Collections.sort(pokemonModels, comparator);
         notifyDataSetChanged();
     }
-
 }

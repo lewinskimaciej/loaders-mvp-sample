@@ -1,9 +1,20 @@
 package com.example.mvppokemon.presentation.fragments.list;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+
+import com.example.mvppokemon.common.dictionaries.BundleKey;
 import com.example.mvppokemon.dagger.qualifier.Repository;
 import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
 import com.example.mvppokemon.presentation.BasePresenter;
+import com.example.mvppokemon.presentation.activities.pokemon.PokemonActivity;
+import com.example.mvppokemon.presentation.events.PokemonClickedEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -24,7 +35,8 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
     @Override
     public void onStart(boolean firstStart) {
         super.onStart(firstStart);
-        // Your code here. Your view is available using view and will not be null until next onStop()
+        EventBus.getDefault().register(this);
+
         getAllLocalPokemon();
     }
 
@@ -38,17 +50,8 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
 
     @Override
     public void onStop() {
-        // Your code here, mView will be null after this method until next onStart()
+        EventBus.getDefault().unregister(this);
         super.onStop();
-    }
-
-    @Override
-    public void onPresenterDestroyed() {
-        /*
-         * Your code here. After this method, your presenter (and view) will be completely destroyed
-         * so make sure to cancel any HTTP call or database connection
-         */
-        super.onPresenterDestroyed();
     }
 
     @Override
@@ -57,10 +60,14 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
     }
 
     private void getAllLocalPokemon() {
+        if (view != null) {
+            view.setLoaderVisibility(true);
+        }
         pokemonRepository.getAllLocalPokemon().subscribe(new DisposableSingleObserver<List<PokemonModel>>() {
             @Override
             public void onSuccess(List<PokemonModel> value) {
                 if (view != null) {
+                    view.setLoaderVisibility(false);
                     view.hideSwipeRefreshLoader();
                 }
 
@@ -70,9 +77,22 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
             @Override
             public void onError(Throwable e) {
                 if (view != null) {
+                    view.setLoaderVisibility(false);
                     view.hideSwipeRefreshLoader();
                 }
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPokemonClicked(PokemonClickedEvent event) {
+        if (view != null) {
+            Activity activity = view.getParentActivity();
+            Intent intent = new Intent(activity, PokemonActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putLong(BundleKey.KEY_POKEMON_ID, event.getPokemonModel().getId());
+            intent.putExtras(bundle);
+            activity.startActivity(intent);
+        }
     }
 }

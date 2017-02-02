@@ -6,4 +6,6 @@
     <string name="internal_server_error">Internal server error</string>
     <string name="not_found_error">Not found</string>
     <string name="generic_error">Something went wrong</string>
+    <string name="title_activity_pokemon">PokemonActivity</string>
+    <string name="description_pokemon_sprite">Pokemon sprite</string>
 </resources>

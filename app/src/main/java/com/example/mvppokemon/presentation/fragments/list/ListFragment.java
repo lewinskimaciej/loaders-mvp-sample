@@ -1,9 +1,9 @@
 package com.example.mvppokemon.presentation.fragments.list;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +19,7 @@ import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.PokemonRepositoryModule;
 import com.example.mvppokemon.presentation.BaseFragment;
 import com.example.mvppokemon.presentation.PresenterFactory;
-import com.example.mvppokemon.presentation.adapters.recycler.PokemonRecyclerViewAdapter;
+import com.example.mvppokemon.presentation.adapters.recycler.PokemonRecyclerViewAdapter.PokemonRecyclerViewAdapter;
 import com.example.mvppokemon.presentation.fragments.list.dagger.DaggerListViewComponent;
 import com.example.mvppokemon.presentation.fragments.list.dagger.ListViewModule;
 
@@ -46,8 +46,6 @@ public final class ListFragment extends BaseFragment<ListPresenter, ListView> im
 
     private PokemonRecyclerViewAdapter pokemonRecyclerViewAdapter;
 
-    // Your presenter is available using the presenter variable
-
     public ListFragment() {
         // Required empty public constructor
     }
@@ -67,20 +65,24 @@ public final class ListFragment extends BaseFragment<ListPresenter, ListView> im
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ButterKnife.bind(this, view);
 
-        Context context = getActivity();
+        setUpPokemonRecyclerView();
 
+        return view;
+    }
+
+    private void setUpPokemonRecyclerView() {
         swipeRefreshLayout.setOnRefreshListener(() -> {
             if (presenter != null) {
                 presenter.refreshData();
             }
         });
 
+        Context context = getActivity();
+
         pokemonRecyclerViewAdapter = new PokemonRecyclerViewAdapter(context);
         recyclerView.setAdapter(pokemonRecyclerViewAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
-
-        return view;
     }
 
     @Override
@@ -118,4 +120,11 @@ public final class ListFragment extends BaseFragment<ListPresenter, ListView> im
     public void hideSwipeRefreshLoader() {
         swipeRefreshLayout.setRefreshing(false);
     }
+
+    @Override
+    public Activity getParentActivity() {
+        return getActivity();
+    }
+
+
 }

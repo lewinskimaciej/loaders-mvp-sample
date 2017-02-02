@@ -1,6 +1,7 @@
-package com.example.mvppokemon.presentation.adapters.recycler;
+package com.example.mvppokemon.presentation.adapters.recycler.PokemonRecyclerViewAdapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,6 +10,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.mvppokemon.R;
 import com.example.mvppokemon.data.models.PokemonModel;
+import com.example.mvppokemon.presentation.events.PokemonClickedEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +38,7 @@ public class PokemonHolder extends RecyclerView.ViewHolder {
     PokemonModel pokemonModel;
     Context context;
 
-    PokemonHolder(View itemView, Context context) {
+    PokemonHolder(Context context, View itemView) {
         super(itemView);
         this.context = context;
         ButterKnife.bind(this, itemView);
@@ -42,7 +46,7 @@ public class PokemonHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.show_pokemon)
     public void showPokemon() {
-        // TODO: intent to start PokemonActivity
+        EventBus.getDefault().post(new PokemonClickedEvent(pokemonModel));
     }
 
     public void setPokemon(PokemonModel pokemon) {

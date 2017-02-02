@@ -1,5 +1,6 @@
 package com.example.mvppokemon.presentation.fragments.list;
 
+import android.app.Activity;
 import android.support.annotation.UiThread;
 
 import com.example.mvppokemon.data.models.PokemonModel;
@@ -13,4 +14,6 @@ public interface ListView {
     void setLoaderVisibility(boolean visible);
 
     void hideSwipeRefreshLoader();
+
+    Activity getParentActivity();
 }

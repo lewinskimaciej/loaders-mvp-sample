@@ -3,14 +3,14 @@
     package="com.example.mvppokemon">
 
     <application
+        android:name=".PokemonApplication"
         android:allowBackup="false"
-        android:name="com.example.mvppokemon.PokemonApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.mvppokemon.presentation.activities.main.MainActivity"
+            android:name=".presentation.activities.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -19,6 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.activities.pokemon.PokemonActivity"
+            android:label="@string/title_activity_pokemon"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -131,6 +131,10 @@ dependencies {
     compile "io.requery:requery-android:$rootProject.ext.requeryVersion"
     apt "io.requery:requery-processor:$rootProject.ext.requeryVersion"
 
+    //
+    // EventBus
+    compile "org.greenrobot:eventbus:$rootProject.ext.eventBusVersion"
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                            //
     //                                       TESTING STUFF                                        //
