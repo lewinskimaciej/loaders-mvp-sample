@@ -1,10 +1,16 @@
 package com.example.mvppokemon.presentation.fragments.search;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
+import com.example.mvppokemon.common.dictionaries.BundleKey;
 import com.example.mvppokemon.common.dictionaries.HttpCode;
 import com.example.mvppokemon.dagger.qualifier.Repository;
 import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
 import com.example.mvppokemon.presentation.BasePresenter;
+import com.example.mvppokemon.presentation.activities.pokemon.PokemonActivity;
 import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 
 import javax.inject.Inject;
@@ -88,6 +94,15 @@ public final class SearchPresenter extends BasePresenter<SearchView> implements 
                         }
                     });
         }
+    }
+
+    @Override
+    public void pokemonClicked(Context context) {
+        Intent intent = new Intent(context, PokemonActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putLong(BundleKey.KEY_POKEMON_ID, currentPokemon.getId());
+        intent.putExtras(bundle);
+        context.startActivity(intent);
     }
 
     private void setPokemonData(PokemonModel pokemonData) {

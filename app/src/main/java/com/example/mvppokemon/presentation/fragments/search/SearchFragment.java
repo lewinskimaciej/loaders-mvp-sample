@@ -2,7 +2,6 @@ package com.example.mvppokemon.presentation.fragments.search;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mvppokemon.R;
-import com.example.mvppokemon.common.dictionaries.HttpCode;
 import com.example.mvppokemon.dagger.component.ApplicationComponent;
 import com.example.mvppokemon.data.repositories.pokemon.PokemonRepositoryModule;
 import com.example.mvppokemon.presentation.BaseFragment;
@@ -127,6 +125,13 @@ public final class SearchFragment extends BaseFragment<SearchPresenter, SearchVi
         if (presenter != null) {
             int number = Integer.parseInt(numberInput.getText().toString());
             presenter.getPokemon(number);
+        }
+    }
+
+    @OnClick(R.id.pokemon_container)
+    public void onPokemonClick() {
+        if (presenter != null) {
+            presenter.pokemonClicked(getActivity());
         }
     }
 }

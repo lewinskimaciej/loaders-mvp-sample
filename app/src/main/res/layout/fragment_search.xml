@@ -31,10 +31,11 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:background="@drawable/rounded_card_background"
+        android:clickable="true"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:visibility="gone"
-        android:padding="15dp">
+        android:padding="15dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/pokemon_number"
