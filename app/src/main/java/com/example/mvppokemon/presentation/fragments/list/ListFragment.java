@@ -32,6 +32,8 @@ import butterknife.ButterKnife;
 
 public final class ListFragment extends BaseFragment<ListPresenter, ListView> implements ListView {
 
+    public static final String TAB_NAME = "Downloaded";
+
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 

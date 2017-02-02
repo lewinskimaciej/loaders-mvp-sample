@@ -45,6 +45,13 @@ public class MainScreenPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return String.valueOf(position);
+        switch (position) {
+            case 0:
+                return SearchFragment.TAB_NAME;
+            case 1:
+                return ListFragment.TAB_NAME;
+            default:
+                return "Other";
+        }
     }
 }

@@ -29,6 +29,8 @@ import butterknife.OnClick;
 
 public final class SearchFragment extends BaseFragment<SearchPresenter, SearchView> implements SearchView {
 
+    public static final String TAB_NAME = "Search";
+
     @BindView(R.id.pokemon_name)
     TextView pokemonName;
 
