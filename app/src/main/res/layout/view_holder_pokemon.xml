@@ -45,6 +45,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:alpha="0.5"
+                android:contentDescription="@string/description_pokemon_sprite"
                 android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
 
         </FrameLayout>

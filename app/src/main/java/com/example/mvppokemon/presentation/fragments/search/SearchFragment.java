@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -44,6 +45,9 @@ public final class SearchFragment extends BaseFragment<SearchPresenter, SearchVi
 
     @BindView(R.id.number_input)
     EditText numberInput;
+
+    @BindView(R.id.pokemon_container)
+    LinearLayout pokemonContainer;
 
     @Inject
     PresenterFactory<SearchPresenter> presenterFactory;
@@ -102,6 +106,15 @@ public final class SearchFragment extends BaseFragment<SearchPresenter, SearchVi
         Glide.with(this)
                 .load(url)
                 .into(pokemonSprite);
+    }
+
+    @Override
+    public void setPokemonBackgroundVisbility(boolean visbile) {
+        if (visbile) {
+            pokemonContainer.setVisibility(View.VISIBLE);
+        } else {
+            pokemonContainer.setVisibility(View.GONE);
+        }
     }
 
     @Override

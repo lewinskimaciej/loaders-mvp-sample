@@ -95,6 +95,7 @@ public final class SearchPresenter extends BasePresenter<SearchView> implements 
             view.setPokemonName(pokemonData.getName());
             view.setPokemonNumber(pokemonData.getId());
             view.setPokemonSprite(pokemonData.getSprites().getFrontDefault());
+            view.setPokemonBackgroundVisbility(true);
         }
     }
 

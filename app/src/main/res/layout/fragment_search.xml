@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,34 +13,41 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:maxLength="3"
-        android:text="@string/default_pokemon_number_input" />
+        tools:text="@string/default_pokemon_number_input" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="20dp"
-        android:layout_toEndOf="@+id/number_input"
         android:text="@string/get_pokemon_button" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/pokemon_container"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/button"
-        android:layout_marginTop="22dp"
-        android:orientation="vertical">
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_card_background"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:padding="15dp">
 
         <TextView
             android:id="@+id/pokemon_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:textSize="30sp"
+            android:textStyle="bold"
             tools:text="@string/default_pokemon_number_input" />
 
         <TextView
             android:id="@+id/pokemon_name"
+            style="@style/Base.TextAppearance.AppCompat.Headline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -52,7 +58,7 @@
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_marginTop="10dp"
-            android:contentDescription="@null" />
+            android:contentDescription="@string/description_pokemon_sprite" />
 
     </LinearLayout>
 

@@ -11,5 +11,7 @@ public interface SearchView {
 
     void setPokemonSprite(String url);
 
+    void setPokemonBackgroundVisbility(boolean visbile);
+
     void setButtonEnabled(boolean enabled);
 }

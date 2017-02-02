@@ -35,8 +35,8 @@ public class PokemonHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.pokemon_name)
     TextView pokemonName;
 
-    PokemonModel pokemonModel;
-    Context context;
+    private PokemonModel pokemonModel;
+    private Context context;
 
     PokemonHolder(Context context, View itemView) {
         super(itemView);
