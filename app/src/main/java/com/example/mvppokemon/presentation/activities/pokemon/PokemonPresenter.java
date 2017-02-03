@@ -38,6 +38,11 @@ public final class PokemonPresenter extends BasePresenter<PokemonView> implement
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
     public void getPokemonId(int pokemonId) {
         pokemonRepository.getPokemon(pokemonId)
                 .subscribe(new DisposableObserver<PokemonModel>() {

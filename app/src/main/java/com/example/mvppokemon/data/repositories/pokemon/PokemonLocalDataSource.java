@@ -47,6 +47,8 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
                     public void onSuccess(PokemonModel value) {
                         Timber.d("onSuccess inserting initial");
 
+                        value.getStats().clear();
+
                         for (StatsModel statsModel : tempList) {
                             value.getStats().add(statsModel);
                         }

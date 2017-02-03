@@ -135,6 +135,12 @@ dependencies {
     // EventBus
     compile "org.greenrobot:eventbus:$rootProject.ext.eventBusVersion"
 
+    //
+    // LeakCanary
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.leakCanaryBusVersion"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.leakCanaryBusVersion"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.leakCanaryBusVersion"
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                            //
     //                                       TESTING STUFF                                        //

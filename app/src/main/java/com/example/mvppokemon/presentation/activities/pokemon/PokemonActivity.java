@@ -22,6 +22,7 @@ import com.example.mvppokemon.presentation.activities.pokemon.dagger.DaggerPokem
 import com.example.mvppokemon.presentation.activities.pokemon.dagger.PokemonViewModule;
 import com.example.mvppokemon.presentation.adapters.recycler.StatsRecyclerViewAdapter.StatRecyclerViewAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -107,6 +108,7 @@ public final class PokemonActivity extends BaseActivity<PokemonPresenter, Pokemo
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         statsRecyclerView.setLayoutManager(linearLayoutManager);
+        statRecyclerViewAdapter.setStats(new ArrayList<>());
     }
 
     private void getIntentData() {

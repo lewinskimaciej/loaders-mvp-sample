@@ -62,4 +62,5 @@ ext {
     glideVersion = '3.7.0'
     requeryVersion = '1.1.1'
     eventBusVersion = '3.0.0'
+    leakCanaryBusVersion = '1.5'
 }
