@@ -14,5 +14,5 @@ import retrofit2.http.Path;
 
 public interface PokemonRetrofitInterface {
     @GET("pokemon/{number}")
-    Observable<PokemonModel> getPokemon(@Path("number") int number);
+    Observable<PokemonModel> getPokemon(@Path("number") long number);
 }

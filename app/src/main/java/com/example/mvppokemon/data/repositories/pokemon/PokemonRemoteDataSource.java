@@ -20,7 +20,7 @@ public final class PokemonRemoteDataSource implements PokemonDataSource {
     }
 
     @Override
-    public Observable<PokemonModel> getPokemon(int number) {
+    public Observable<PokemonModel> getPokemon(long number) {
         return pokemonRetrofitInterface.getPokemon(number)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -31,8 +31,9 @@ public final class PokemonRemoteDataSource implements PokemonDataSource {
      */
     @Deprecated
     @Override
-    public void savePokemon(PokemonModel pokemonModel) {
+    public Observable<PokemonModel> savePokemon(PokemonModel pokemonModel) {
         // cannot save in remote
+        return Observable.error(new Throwable("Cannot save in API"));
     }
 
     /**
@@ -42,7 +43,7 @@ public final class PokemonRemoteDataSource implements PokemonDataSource {
     @Override
     public Observable<PokemonModel> getAllLocalPokemonSortedById() {
         // api has no method to get more than one at a time
-        return null;
+        return Observable.error(new Throwable("Cannot get all Pokemon at once from API."));
     }
 
 }

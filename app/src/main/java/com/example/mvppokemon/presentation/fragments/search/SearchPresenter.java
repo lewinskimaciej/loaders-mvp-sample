@@ -46,11 +46,10 @@ public final class SearchPresenter extends BasePresenter<SearchView> implements 
                     .subscribe(new DisposableObserver<PokemonModel>() {
                         @Override
                         public void onNext(PokemonModel value) {
-                            if (value != null) {
-                                Timber.d("Pokemon name: %s", String.valueOf(value.getName()));
-                                currentPokemon = value;
-                                setPokemonData(currentPokemon);
-                            }
+                            Timber.d("Pokemon name: %s", String.valueOf(value.getName()));
+                            currentPokemon = value;
+                            setPokemonData(currentPokemon);
+                            view.setButtonEnabled(true);
                         }
 
                         @Override

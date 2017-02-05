@@ -24,18 +24,18 @@ public final class PokemonRepository implements PokemonRepositoryInterface {
     }
 
     @Override
-    public Observable<PokemonModel> getPokemon(int number) {
+    public Observable<PokemonModel> getPokemon(long number) {
         return pokemonRemoteDataSource.getPokemon(number)
                 .map(pokemonModel -> {
-                    savePokemon(pokemonModel);
+                    savePokemon(pokemonModel).subscribe();
                     return pokemonModel;
                 })
                 .mergeWith(pokemonLocalDataSource.getPokemon(number));
     }
 
     @Override
-    public void savePokemon(PokemonModel pokemonModel) {
-        pokemonLocalDataSource.savePokemon(pokemonModel);
+    public Observable<PokemonModel> savePokemon(PokemonModel pokemonModel) {
+        return pokemonLocalDataSource.savePokemon(pokemonModel);
     }
 
     @Override

@@ -27,7 +27,7 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
     }
 
     @Override
-    public Observable<PokemonModel> getPokemon(int number) {
+    public Observable<PokemonModel> getPokemon(long number) {
         return database.findByKey(PokemonModel.class, number)
                 .toObservable()
                 .subscribeOn(Schedulers.io())
@@ -35,31 +35,19 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
     }
 
     @Override
-    public void savePokemon(final PokemonModel pokemonModel) {
+    public Observable<PokemonModel> savePokemon(final PokemonModel pokemonModel) {
         List<StatsModel> tempList = new ArrayList<>(pokemonModel.getStats());
 
-        database.upsert(pokemonModel)
+        pokemonModel.getStats().clear();
+
+        for (StatsModel statsModel : tempList) {
+            pokemonModel.getStats().add(statsModel);
+        }
+
+        return database.upsert(pokemonModel)
+                .toObservable()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableSingleObserver<PokemonModel>() {
-                    @Override
-                    public void onSuccess(PokemonModel value) {
-                        Timber.d("onSuccess inserting initial");
-
-                        value.getStats().clear();
-
-                        for (StatsModel statsModel : tempList) {
-                            value.getStats().add(statsModel);
-                        }
-
-                        updateAfterInserting(value);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.d("onError inserting initial");
-                    }
-                });
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     private void updateAfterInserting(PokemonModel value) {
