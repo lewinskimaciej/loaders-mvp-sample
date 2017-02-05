@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import com.example.mvppokemon.R;
 import com.example.mvppokemon.data.models.PokemonModel;
@@ -50,8 +49,19 @@ public class PokemonRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         return pokemonModels.size();
     }
 
-    public void setPokemonList(List<PokemonModel> pokemonList) {
-        this.pokemonModels = new ArrayList<>(pokemonList);
+    public void addPokemon(PokemonModel pokemon) {
+        int currentIndex = this.pokemonModels.size();
+        for (int i = 0; i < this.pokemonModels.size(); i++) {
+            if (pokemon.getId() == this.pokemonModels.get(i).getId()) {
+                return;
+            }
+        }
+
+        notifyItemInserted(currentIndex);
+    }
+
+    public void setAdapterData(List<PokemonModel> list) {
+        this.pokemonModels = new ArrayList<>(list);
         notifyDataSetChanged();
     }
 }

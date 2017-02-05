@@ -9,11 +9,12 @@ import java.util.List;
 
 @UiThread
 public interface ListView {
-    void setAdapterData(List<PokemonModel> pokemonList);
 
-    void setLoaderVisibility(boolean visible);
+    void setElementsInAdapter(List<PokemonModel> pokemonList);
 
-    void hideSwipeRefreshLoader();
+    void addElementToAdapter(PokemonModel pokemon);
+
+    void setRefreshing(boolean visibility);
 
     Activity getParentActivity();
 }

@@ -10,7 +10,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -81,12 +80,11 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
     }
 
     @Override
-    public Single<List<PokemonModel>> getAllLocalPokemon() {
+    public Observable<PokemonModel> getAllLocalPokemonSortedById() {
         return database.select(PokemonModel.class)
                 .orderBy(PokemonModel.ID)
                 .get()
                 .observable()
-                .toList()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread());
     }

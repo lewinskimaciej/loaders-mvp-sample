@@ -16,16 +16,20 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.observers.DisposableObserver;
+import timber.log.Timber;
 
 public final class ListPresenter extends BasePresenter<ListView> implements ListPresenterInterface {
 
     // The view is available using the view variable
     PokemonRepositoryInterface pokemonRepository;
+
+    List<PokemonModel> pokemonModelList;
 
     @Inject
     public ListPresenter(@Repository PokemonRepositoryInterface pokemonRepository) {
@@ -36,14 +40,11 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
     public void onStart(boolean firstStart) {
         super.onStart(firstStart);
         EventBus.getDefault().register(this);
-
-        getAllLocalPokemon();
-    }
-
-    private void setPokemonList(List<PokemonModel> pokemon) {
-        if (pokemon != null) {
-            if (view != null) {
-                view.setAdapterData(pokemon);
+        if (view != null) {
+            if (pokemonModelList != null) {
+                view.setElementsInAdapter(pokemonModelList);
+            } else {
+                getAllLocalPokemon();
             }
         }
     }
@@ -61,27 +62,36 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
 
     private void getAllLocalPokemon() {
         if (view != null) {
-            view.setLoaderVisibility(true);
+            view.setRefreshing(true);
+
+            pokemonModelList = new ArrayList<>();
+
+            pokemonRepository.getAllLocalPokemonSortedById().subscribe(new DisposableObserver<PokemonModel>() {
+                @Override
+                public void onNext(PokemonModel value) {
+                    Timber.d("%s", value.getName());
+                    pokemonModelList.add(value);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Timber.d("onError");
+                    if (view != null) {
+                        onGenericError();
+                        view.setRefreshing(false);
+                    }
+                }
+
+                @Override
+                public void onComplete() {
+                    Timber.d("onComplete");
+                    if (view != null) {
+                        view.setElementsInAdapter(pokemonModelList);
+                        view.setRefreshing(false);
+                    }
+                }
+            });
         }
-        pokemonRepository.getAllLocalPokemon().subscribe(new DisposableSingleObserver<List<PokemonModel>>() {
-            @Override
-            public void onSuccess(List<PokemonModel> value) {
-                if (view != null) {
-                    view.setLoaderVisibility(false);
-                    view.hideSwipeRefreshLoader();
-                }
-
-                setPokemonList(value);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if (view != null) {
-                    view.setLoaderVisibility(false);
-                    view.hideSwipeRefreshLoader();
-                }
-            }
-        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

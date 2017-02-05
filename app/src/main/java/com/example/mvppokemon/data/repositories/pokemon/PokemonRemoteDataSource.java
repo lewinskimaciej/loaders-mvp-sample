@@ -4,12 +4,9 @@ import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonDataSource;
 import com.example.mvppokemon.data.retrofit.PokemonRetrofitInterface;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -43,8 +40,8 @@ public final class PokemonRemoteDataSource implements PokemonDataSource {
      */
     @Deprecated
     @Override
-    public Single<List<PokemonModel>> getAllLocalPokemon() {
-        // do nothing
+    public Observable<PokemonModel> getAllLocalPokemonSortedById() {
+        // api has no method to get more than one at a time
         return null;
     }
 

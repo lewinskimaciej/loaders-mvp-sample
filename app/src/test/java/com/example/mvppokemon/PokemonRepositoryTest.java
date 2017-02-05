@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -16,13 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.observers.TestObserver;
 import timber.log.Timber;
 
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.intThat;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class PokemonRepositoryTest {
@@ -50,9 +46,9 @@ public class PokemonRepositoryTest {
     public void getOnePokemonFromLocal() {
         PokemonModel pokemonModel = pokemonList.get(0);
 
-        // local data source has data available
+        // local source has data available
         setOnePokemonAvailable(localDataSource, pokemonModel);
-        // remote data source has no data
+        // remote source has no data
         setOnePokemonNotAvailable(remoteDataSource);
 
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
@@ -61,6 +57,7 @@ public class PokemonRepositoryTest {
                 .subscribe(observerPokemonFound);
 
         observerPokemonFound.assertValue(pokemonModel);
+        observerPokemonFound.assertValueCount(1);
         observerPokemonFound.assertComplete();
     }
 
@@ -68,9 +65,9 @@ public class PokemonRepositoryTest {
     public void getOnePokemonFromRemote() {
         PokemonModel pokemonModel = pokemonList.get(0);
 
-        // remote data source has data available
+        // remote source has data available
         setOnePokemonAvailable(remoteDataSource, pokemonModel);
-        // local data source has no data
+        // local source has no data
         setOnePokemonNotAvailable(localDataSource);
 
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
@@ -79,6 +76,7 @@ public class PokemonRepositoryTest {
                 .subscribe(observerPokemonFound);
 
         observerPokemonFound.assertValue(pokemonModel);
+        observerPokemonFound.assertValueCount(1);
         observerPokemonFound.assertComplete();
     }
 
@@ -86,9 +84,9 @@ public class PokemonRepositoryTest {
     public void getOnePokemonFromLocalAndRemote() {
         PokemonModel pokemonModel = pokemonList.get(0);
 
-        // remote data source has data available
+        // remote source has data available
         setOnePokemonAvailable(localDataSource, pokemonModel);
-        // local data source has data available
+        // local source has data available
         setOnePokemonAvailable(remoteDataSource, pokemonModel);
 
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
@@ -98,6 +96,7 @@ public class PokemonRepositoryTest {
 
         // returns 2 values, local and remote
         observerPokemonFound.assertValues(pokemonModel, pokemonModel);
+        observerPokemonFound.assertValueCount(2);
         observerPokemonFound.assertComplete();
     }
 
@@ -105,9 +104,9 @@ public class PokemonRepositoryTest {
     public void failToGetOnePokemonFromLocalAndRemote() {
         PokemonModel pokemonModel = pokemonList.get(0);
 
-        // remote data source has no data
+        // remote source has no data
         setOnePokemonNotAvailable(localDataSource);
-        // local data source has no data
+        // local source has no data
         setOnePokemonNotAvailable(remoteDataSource);
 
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
@@ -116,6 +115,34 @@ public class PokemonRepositoryTest {
                 .subscribe(observerPokemonFound);
 
         // returns no values
+        observerPokemonFound.assertValueCount(0);
+        observerPokemonFound.assertComplete();
+    }
+
+    @Test
+    public void getAllLocalPokemonSortedById() {
+        // data available, local only
+        setPokemonAvailable(localDataSource, pokemonList);
+
+        TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
+
+        pokemonRepository.getAllLocalPokemonSortedById().subscribe(observerPokemonFound);
+
+        observerPokemonFound.assertValueCount(pokemonList.size());
+        // order in list: 1, 3, 2, sorted order: 1, 2, 3
+        observerPokemonFound.assertValues(pokemonList.get(0), pokemonList.get(2), pokemonList.get(1));
+        observerPokemonFound.assertComplete();
+    }
+
+    @Test
+    public void failToGetAllLocalPokemonSortedById() {
+        // no data, local only
+        setPokemonNotAvailable(localDataSource);
+
+        TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
+
+        pokemonRepository.getAllLocalPokemonSortedById().subscribe(observerPokemonFound);
+
         observerPokemonFound.assertValueCount(0);
         observerPokemonFound.assertComplete();
     }
@@ -129,11 +156,13 @@ public class PokemonRepositoryTest {
     }
 
     private void setPokemonAvailable(PokemonDataSource dataSource, List<PokemonModel> list) {
-        when(dataSource.getAllLocalPokemon()).thenReturn(Single.just(list));
+        when(dataSource.getAllLocalPokemonSortedById())
+                .thenReturn(Observable.fromIterable(list)
+                        .sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId())));
     }
 
     private void setPokemonNotAvailable(PokemonDataSource dataSource) {
-        when(dataSource.getAllLocalPokemon()).thenReturn(Single.just(new ArrayList<>()));
+        when(dataSource.getAllLocalPokemonSortedById()).thenReturn(Observable.empty());
     }
 
     private List<PokemonModel> setUpFakePokemonList() {
@@ -148,9 +177,10 @@ public class PokemonRepositoryTest {
             PokemonModel pokemon3 = objectMapper.readValue("{\"id\":3,\"name\":\"venusaur\",\"sprites\":{\"id\":0,\"pokemonModel\":null,\"front_default\":\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png\"},\"stats\":[{\"id\":0,\"pokemonModel\":null,\"base_stat\":80,\"effort\":0,\"stat\":{\"id\":0,\"statsModel\":null,\"name\":\"speed\",\"url\":\"http://pokeapi.co/api/v2/stat/6/\"}},{\"id\":0,\"pokemonModel\":null,\"base_stat\":100,\"effort\":1,\"stat\":{\"id\":0,\"statsModel\":null,\"name\":\"special-defense\",\"url\":\"http://pokeapi.co/api/v2/stat/5/\"}},{\"id\":0,\"pokemonModel\":null,\"base_stat\":100,\"effort\":2,\"stat\":{\"id\":0,\"statsModel\":null,\"name\":\"special-attack\",\"url\":\"http://pokeapi.co/api/v2/stat/4/\"}},{\"id\":0,\"pokemonModel\":null,\"base_stat\":83,\"effort\":0,\"stat\":{\"id\":0,\"statsModel\":null,\"name\":\"defense\",\"url\":\"http://pokeapi.co/api/v2/stat/3/\"}},{\"id\":0,\"pokemonModel\":null,\"base_stat\":82,\"effort\":0,\"stat\":{\"id\":0,\"statsModel\":null,\"name\":\"attack\",\"url\":\"http://pokeapi.co/api/v2/stat/2/\"}},{\"id\":0,\"pokemonModel\":null,\"base_stat\":80,\"effort\":0,\"stat\":{\"id\":0,\"statsModel\":null,\"name\":\"hp\",\"url\":\"http://pokeapi.co/api/v2/stat/1/\"}}]}",
                     PokemonModel.class);
 
+            // ordered incorrectly to test sorting
             list.add(pokemon1);
-            list.add(pokemon2);
             list.add(pokemon3);
+            list.add(pokemon2);
         } catch (IOException e) {
             Timber.d(e);
         }

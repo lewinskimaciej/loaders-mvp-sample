@@ -104,23 +104,17 @@ public final class ListFragment extends BaseFragment<ListPresenter, ListView> im
     }
 
     @Override
-    public void setAdapterData(List<PokemonModel> pokemonList) {
-        pokemonRecyclerViewAdapter.setPokemonList(pokemonList);
-        swipeRefreshLayout.setRefreshing(false);
+    public void setElementsInAdapter(List<PokemonModel> pokemonList) {
+        pokemonRecyclerViewAdapter.setAdapterData(pokemonList);
     }
 
     @Override
-    public void setLoaderVisibility(boolean visible) {
-        if (visible) {
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            progressBar.setVisibility(View.GONE);
-        }
+    public void addElementToAdapter(PokemonModel pokemon) {
+        pokemonRecyclerViewAdapter.addPokemon(pokemon);
     }
-
     @Override
-    public void hideSwipeRefreshLoader() {
-        swipeRefreshLayout.setRefreshing(false);
+    public void setRefreshing(boolean visibility) {
+        swipeRefreshLayout.setRefreshing(visibility);
     }
 
     @Override

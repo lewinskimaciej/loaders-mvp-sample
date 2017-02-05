@@ -39,7 +39,7 @@ public final class HttpCode {
     public static final int LENGTH_REQUIRED = 411;
     public static final int PRECONDITION_FAILED = 412;
     public static final int PAYLOAD_TOO_LARGE = 413;
-    public static final int URI_TOO_LONG= 414;
+    public static final int URI_TOO_LONG = 414;
     public static final int UNSUPPORTED_MEDIA_TYPE = 415;
     public static final int EXPECTATION_FAILED = 417;
     public static final int UPGRADE_REQUIRED = 426;

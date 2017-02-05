@@ -6,12 +6,9 @@ import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonDataSource;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 
 public final class PokemonRepository implements PokemonRepositoryInterface {
 
@@ -42,8 +39,8 @@ public final class PokemonRepository implements PokemonRepositoryInterface {
     }
 
     @Override
-    public Single<List<PokemonModel>> getAllLocalPokemon() {
-        return pokemonLocalDataSource.getAllLocalPokemon();
+    public Observable<PokemonModel> getAllLocalPokemonSortedById() {
+        return pokemonLocalDataSource.getAllLocalPokemonSortedById();
     }
 
 }
