@@ -8,7 +8,7 @@ import com.example.mvppokemon.common.dictionaries.BundleKey;
 import com.example.mvppokemon.dagger.qualifier.Repository;
 import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
-import com.example.mvppokemon.presentation.BasePresenter;
+import com.example.mvppokemon.presentation.base.BasePresenter;
 import com.example.mvppokemon.presentation.activities.pokemon.PokemonActivity;
 import com.example.mvppokemon.presentation.events.PokemonClickedEvent;
 

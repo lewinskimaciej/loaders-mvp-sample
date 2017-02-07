@@ -3,7 +3,7 @@ package com.example.mvppokemon.presentation.activities.pokemon;
 import com.example.mvppokemon.dagger.qualifier.Repository;
 import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
-import com.example.mvppokemon.presentation.BasePresenter;
+import com.example.mvppokemon.presentation.base.BasePresenter;
 
 import javax.inject.Inject;
 

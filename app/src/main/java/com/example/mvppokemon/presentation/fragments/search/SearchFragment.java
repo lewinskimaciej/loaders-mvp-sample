@@ -16,8 +16,8 @@ import com.bumptech.glide.Glide;
 import com.example.mvppokemon.R;
 import com.example.mvppokemon.dagger.component.ApplicationComponent;
 import com.example.mvppokemon.data.repositories.pokemon.PokemonRepositoryModule;
-import com.example.mvppokemon.presentation.BaseFragment;
-import com.example.mvppokemon.presentation.PresenterFactory;
+import com.example.mvppokemon.presentation.base.BaseFragment;
+import com.example.mvppokemon.presentation.base.PresenterFactory;
 import com.example.mvppokemon.presentation.fragments.search.dagger.DaggerSearchViewComponent;
 import com.example.mvppokemon.presentation.fragments.search.dagger.SearchViewModule;
 

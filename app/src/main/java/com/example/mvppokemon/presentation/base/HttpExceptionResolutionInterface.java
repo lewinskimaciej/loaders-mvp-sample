@@ -1,4 +1,4 @@
-package com.example.mvppokemon.presentation;
+package com.example.mvppokemon.presentation.base;
 
 /**
  * Created on 27.01.2017.

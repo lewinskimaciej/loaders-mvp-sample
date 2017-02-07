@@ -11,8 +11,8 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.example.mvppokemon.R;
 import com.example.mvppokemon.dagger.component.ApplicationComponent;
-import com.example.mvppokemon.presentation.BaseActivity;
-import com.example.mvppokemon.presentation.PresenterFactory;
+import com.example.mvppokemon.presentation.base.BaseActivity;
+import com.example.mvppokemon.presentation.base.PresenterFactory;
 import com.example.mvppokemon.presentation.activities.main.dagger.DaggerMainViewComponent;
 import com.example.mvppokemon.presentation.activities.main.dagger.MainViewModule;
 import com.example.mvppokemon.presentation.adapters.pager.MainScreenPagerAdapter;

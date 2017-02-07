@@ -9,7 +9,7 @@ import com.example.mvppokemon.common.dictionaries.HttpCode;
 import com.example.mvppokemon.dagger.qualifier.Repository;
 import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
-import com.example.mvppokemon.presentation.BasePresenter;
+import com.example.mvppokemon.presentation.base.BasePresenter;
 import com.example.mvppokemon.presentation.activities.pokemon.PokemonActivity;
 import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 

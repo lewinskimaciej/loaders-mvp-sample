@@ -1,4 +1,4 @@
-package com.example.mvppokemon.presentation;
+package com.example.mvppokemon.presentation.base;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

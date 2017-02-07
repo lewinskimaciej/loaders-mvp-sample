@@ -1,11 +1,11 @@
-package com.example.mvppokemon.presentation;
+package com.example.mvppokemon.presentation.base;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.example.mvppokemon.PokemonApplication;
@@ -13,17 +13,11 @@ import com.example.mvppokemon.R;
 import com.example.mvppokemon.dagger.component.ApplicationComponent;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class BaseActivity<P extends BasePresenterInterface<V>, V>
-        extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<P>,
-        HttpExceptionResolutionInterface {
+public abstract class BaseFragment<P extends BasePresenterInterface<V>, V>
+        extends Fragment
+        implements LoaderManager.LoaderCallbacks<P>, HttpExceptionResolutionInterface {
 
-    /**
-     * Common counter for views (fragments and activities) that is used to generate loader ids
-     */
-    public static final AtomicInteger viewCounter = new AtomicInteger(0);
     private static final String RECREATION_SAVED_STATE = "recreation_state";
     private static final String LOADER_ID_SAVED_STATE = "loader_id_state";
     /**
@@ -37,7 +31,7 @@ public abstract class BaseActivity<P extends BasePresenterInterface<V>, V>
     @Nullable
     protected P presenter;
     /**
-     * Is this the first start of the activity (after onCreate)
+     * Is this the first start of the fragment (after onCreate)
      */
     private boolean firstStart;
     /**
@@ -46,23 +40,28 @@ public abstract class BaseActivity<P extends BasePresenterInterface<V>, V>
     private int uniqueLoaderIdentifier;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         firstStart = savedInstanceState == null || savedInstanceState.getBoolean(RECREATION_SAVED_STATE);
         uniqueLoaderIdentifier = savedInstanceState == null ? BaseActivity.viewCounter.incrementAndGet() : savedInstanceState.getInt(LOADER_ID_SAVED_STATE);
 
         injectDependencies();
-
-        getSupportLoaderManager().initLoader(uniqueLoaderIdentifier, null, this).startLoading();
-    }
-
-    private void injectDependencies() {
-        setupComponent(((PokemonApplication) getApplication()).getApplicationComponent());
     }
 
     @Override
-    protected void onStart() {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // See http://stackoverflow.com/a/32289822/2508174 for the use of getActivity().getSupportLoaderManager()
+        getActivity().getSupportLoaderManager().initLoader(uniqueLoaderIdentifier, null, this).startLoading();
+    }
+
+    private void injectDependencies() {
+        setupComponent(((PokemonApplication) getActivity().getApplication()).getApplicationComponent());
+    }
+
+    @Override
+    public void onStart() {
         super.onStart();
         if (presenter == null) {
             needToCallStart.set(true);
@@ -83,7 +82,7 @@ public abstract class BaseActivity<P extends BasePresenterInterface<V>, V>
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         if (presenter != null) {
             presenter.onStop();
             presenter.onViewDetached();
@@ -92,7 +91,7 @@ public abstract class BaseActivity<P extends BasePresenterInterface<V>, V>
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(RECREATION_SAVED_STATE, firstStart);
         outState.putInt(LOADER_ID_SAVED_STATE, uniqueLoaderIdentifier);
@@ -100,7 +99,7 @@ public abstract class BaseActivity<P extends BasePresenterInterface<V>, V>
 
     @Override
     public final Loader<P> onCreateLoader(int id, Bundle args) {
-        return new PresenterLoader<>(this, getPresenterFactory());
+        return new PresenterLoader<>(getActivity(), getPresenterFactory());
     }
 
     @Override
@@ -133,16 +132,16 @@ public abstract class BaseActivity<P extends BasePresenterInterface<V>, V>
 
     @Override
     public void onInternalServerError() {
-        Toast.makeText(this, getString(R.string.internal_server_error), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.internal_server_error), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onNotFound() {
-        Toast.makeText(this, getString(R.string.not_found_error), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.not_found_error), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onGenericError() {
-        Toast.makeText(this, getString(R.string.generic_error), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.generic_error), Toast.LENGTH_SHORT).show();
     }
 }
