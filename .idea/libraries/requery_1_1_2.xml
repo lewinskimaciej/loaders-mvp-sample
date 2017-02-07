@@ -6,6 +6,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.requery/requery/1.1.2/7bf015c5568e245d512d502b14528f27b6a5df1d/requery-1.1.2-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.requery/requery/1.1.2/7bf015c5568e245d512d502b14528f27b6a5df1d/requery-1.1.2-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
