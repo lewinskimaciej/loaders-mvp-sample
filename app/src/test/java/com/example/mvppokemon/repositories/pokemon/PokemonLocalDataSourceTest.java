@@ -208,6 +208,26 @@ public class PokemonLocalDataSourceTest {
         observerPokemon.assertComplete();
     }
 
+    @Test
+    public void getNoPokemon() {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        TestObserver<PokemonModel> observerPokemon = new TestObserver<>();
+
+        // insert it
+        pokemonLocalDataSource.getAllLocalPokemonSortedById()
+                .doOnComplete(countDownLatch::countDown)
+                .subscribe(observerPokemon);
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            Timber.d(e);
+        }
+
+        observerPokemon.assertValueCount(0);
+        observerPokemon.assertComplete();
+    }
+
     private List<PokemonModel> setUpFakePokemonList() {
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayList<PokemonModel> list = new ArrayList<>();
