@@ -18,11 +18,12 @@ package com.example.mvppokemon.common.jackson;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.Module;
+
 import io.requery.meta.EntityModel;
 
 public class RequeryModule extends Module {
 
-    private static final Version VERSION = new Version(1,0,0, "", "io.requery", "requery-jackson");
+    private static final Version VERSION = new Version(1, 0, 0, "", "io.requery", "requery-jackson");
     private final EntityModel model;
 
     RequeryModule(EntityModel model) {

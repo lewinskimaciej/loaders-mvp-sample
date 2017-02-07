@@ -5,32 +5,25 @@ import com.example.mvppokemon.data.repositories.pokemon.PokemonRepository;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonDataSource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.hamcrest.core.IsNot;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.Observable;
+import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.observers.TestObserver;
-import io.requery.Entity;
-import io.requery.Persistable;
-import io.requery.reactivex.ReactiveEntityStore;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 public class PokemonRepositoryTest {
@@ -52,6 +45,13 @@ public class PokemonRepositoryTest {
         MockitoAnnotations.initMocks(this);
 
         pokemonRepository = new PokemonRepository(remoteDataSource, localDataSource);
+
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler(__ -> Schedulers.trampoline());
+    }
+
+    @After
+    public void teardown() {
+        RxAndroidPlugins.reset();
     }
 
     @Test
@@ -66,6 +66,7 @@ public class PokemonRepositoryTest {
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
 
         pokemonRepository.getPokemon(pokemonModel.getId())
+                .observeOn(Schedulers.trampoline())
                 .subscribe(observerPokemonFound);
 
         observerPokemonFound.assertValue(pokemonModel);
@@ -87,6 +88,7 @@ public class PokemonRepositoryTest {
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
 
         pokemonRepository.getPokemon(pokemonModel.getId())
+                .observeOn(Schedulers.trampoline())
                 .subscribe(observerPokemonFound);
 
         observerPokemonFound.assertValue(pokemonModel);
@@ -108,6 +110,7 @@ public class PokemonRepositoryTest {
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
 
         pokemonRepository.getPokemon(pokemonModel.getId())
+                .observeOn(Schedulers.trampoline())
                 .subscribe(observerPokemonFound);
 
         // returns 2 values, local and remote
@@ -128,6 +131,7 @@ public class PokemonRepositoryTest {
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
 
         pokemonRepository.getPokemon(pokemonModel.getId())
+                .observeOn(Schedulers.trampoline())
                 .subscribe(observerPokemonFound);
 
         // returns no values
@@ -142,7 +146,9 @@ public class PokemonRepositoryTest {
 
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
 
-        pokemonRepository.getAllLocalPokemonSortedById().subscribe(observerPokemonFound);
+        pokemonRepository.getAllLocalPokemonSortedById()
+                .observeOn(Schedulers.trampoline())
+                .subscribe(observerPokemonFound);
 
         observerPokemonFound.assertValueCount(pokemonList.size());
         // order in list: 1, 3, 2, sorted order: 1, 2, 3
@@ -157,7 +163,9 @@ public class PokemonRepositoryTest {
 
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
 
-        pokemonRepository.getAllLocalPokemonSortedById().subscribe(observerPokemonFound);
+        pokemonRepository.getAllLocalPokemonSortedById()
+                .observeOn(Schedulers.trampoline())
+                .subscribe(observerPokemonFound);
 
         observerPokemonFound.assertNoValues();
         observerPokemonFound.assertComplete();
@@ -173,7 +181,9 @@ public class PokemonRepositoryTest {
         TestObserver<PokemonModel> observerInserting = new TestObserver<>();
 
         // insert
-        pokemonRepository.savePokemon(pokemonModel).subscribe(observerInserting);
+        pokemonRepository.savePokemon(pokemonModel)
+                .observeOn(Schedulers.trampoline())
+                .subscribe(observerInserting);
 
         observerInserting.assertValueCount(1);
         observerInserting.assertValue(pokemonModel);
@@ -191,7 +201,9 @@ public class PokemonRepositoryTest {
         TestObserver<PokemonModel> observerUpdating = new TestObserver<>();
 
         // insert first
-        pokemonRepository.savePokemon(pokemonModel).subscribe(observerInserting);
+        pokemonRepository.savePokemon(pokemonModel)
+                .observeOn(Schedulers.trampoline())
+                .subscribe(observerInserting);
         observerInserting.assertValueCount(1);
         observerInserting.assertValue(pokemonModel);
         observerInserting.assertComplete();
@@ -200,7 +212,9 @@ public class PokemonRepositoryTest {
 
         pokemonModel.setName("CHANGED");
         // update
-        pokemonRepository.savePokemon(pokemonModel).subscribe(observerUpdating);
+        pokemonRepository.savePokemon(pokemonModel)
+                .observeOn(Schedulers.trampoline())
+                .subscribe(observerUpdating);
 
         String nameAfter = observerUpdating.values().get(0).getName();
 

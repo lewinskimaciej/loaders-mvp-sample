@@ -25,6 +25,9 @@ import com.fasterxml.jackson.databind.introspect.Annotated;
 import com.fasterxml.jackson.databind.introspect.AnnotatedClass;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.ObjectIdInfo;
+
+import java.lang.reflect.Field;
+
 import io.requery.Column;
 import io.requery.ForeignKey;
 import io.requery.JunctionTable;
@@ -40,8 +43,6 @@ import io.requery.meta.EntityModel;
 import io.requery.meta.Type;
 import io.requery.proxy.EntityProxy;
 import io.requery.proxy.PropertyState;
-
-import java.lang.reflect.Field;
 
 /**
  * Implementation of {@link AnnotationIntrospector} that creates Object id type and reference
@@ -145,7 +146,8 @@ class EntityAnnotationIntrospector extends AnnotationIntrospector {
         if (annotated.hasAnnotation(Table.class)) {
             Table table = annotated.getAnnotation(Table.class);
             return new PropertyName(table.name());
-        } if (annotated.hasAnnotation(View.class)) {
+        }
+        if (annotated.hasAnnotation(View.class)) {
             View view = annotated.getAnnotation(View.class);
             return new PropertyName(view.name());
         } else if (annotated.hasAnnotation(Column.class)) {
@@ -164,6 +166,6 @@ class EntityAnnotationIntrospector extends AnnotationIntrospector {
     @Override
     public Boolean isIgnorableType(AnnotatedClass annotatedClass) {
         return PropertyState.class.isAssignableFrom(annotatedClass.getAnnotated()) ||
-               EntityProxy.class.isAssignableFrom(annotatedClass.getAnnotated());
+                EntityProxy.class.isAssignableFrom(annotatedClass.getAnnotated());
     }
 }

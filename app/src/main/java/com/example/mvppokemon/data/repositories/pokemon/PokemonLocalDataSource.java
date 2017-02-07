@@ -10,13 +10,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
-import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.requery.Persistable;
 import io.requery.reactivex.ReactiveEntityStore;
-import timber.log.Timber;
 
 public final class PokemonLocalDataSource implements PokemonDataSource {
 
@@ -31,8 +27,7 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
     public Observable<PokemonModel> getPokemon(long number) {
         return database.findByKey(PokemonModel.class, number)
                 .toObservable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
@@ -50,11 +45,10 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
                     }
                     database.update(pokemonModel)
                             .subscribeOn(Schedulers.io())
-                            .subscribe();
+                            .blockingGet();
                     return pokemonModel;
                 })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
@@ -63,7 +57,6 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
                 .orderBy(PokemonModel.ID)
                 .get()
                 .observable()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.computation());
     }
 }

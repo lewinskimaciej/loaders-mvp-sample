@@ -1,19 +1,13 @@
 package com.example.mvppokemon.presentation.activities.pokemon;
 
-import android.content.Intent;
-
 import com.example.mvppokemon.dagger.qualifier.Repository;
 import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
 import com.example.mvppokemon.presentation.BasePresenter;
-import com.example.mvppokemon.presentation.events.PokemonClickedEvent;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
@@ -45,6 +39,7 @@ public final class PokemonPresenter extends BasePresenter<PokemonView> implement
     @Override
     public void getPokemonId(int pokemonId) {
         pokemonRepository.getPokemon(pokemonId)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<PokemonModel>() {
                     @Override
                     public void onNext(PokemonModel value) {

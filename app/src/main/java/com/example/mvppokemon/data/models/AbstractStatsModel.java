@@ -2,8 +2,6 @@ package com.example.mvppokemon.data.models;
 
 import android.os.Parcelable;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.requery.CascadeAction;

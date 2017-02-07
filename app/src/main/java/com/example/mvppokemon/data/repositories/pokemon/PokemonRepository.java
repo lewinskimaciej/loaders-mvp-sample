@@ -9,6 +9,7 @@ import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonReposi
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public final class PokemonRepository implements PokemonRepositoryInterface {
 
@@ -28,7 +29,8 @@ public final class PokemonRepository implements PokemonRepositoryInterface {
         return pokemonRemoteDataSource.getPokemon(number)
                 .map(pokemonModel -> {
                     if (pokemonLocalDataSource != null) {
-                        savePokemon(pokemonModel).subscribe();
+                        savePokemon(pokemonModel).observeOn(AndroidSchedulers.mainThread())
+                                .subscribe();
                     }
                     return pokemonModel;
                 })

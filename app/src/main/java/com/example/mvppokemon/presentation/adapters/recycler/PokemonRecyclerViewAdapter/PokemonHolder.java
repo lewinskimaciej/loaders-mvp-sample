@@ -1,7 +1,6 @@
 package com.example.mvppokemon.presentation.adapters.recycler.PokemonRecyclerViewAdapter;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;

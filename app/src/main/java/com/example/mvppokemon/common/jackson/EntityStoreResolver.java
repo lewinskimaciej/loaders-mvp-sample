@@ -18,6 +18,7 @@ package com.example.mvppokemon.common.jackson;
 
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdResolver;
+
 import io.requery.EntityStore;
 
 class EntityStoreResolver implements ObjectIdResolver {

@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.Annotated;
 import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
+
 import io.requery.EntityStore;
 
 class ResolverInstantiator extends HandlerInstantiator {
@@ -54,7 +55,7 @@ class ResolverInstantiator extends HandlerInstantiator {
     }
 
     @Override
-    public JsonSerializer<?> serializerInstance(SerializationConfig config,  Annotated annotated, Class<?> serClass) {
+    public JsonSerializer<?> serializerInstance(SerializationConfig config, Annotated annotated, Class<?> serClass) {
         return null;
     }
 

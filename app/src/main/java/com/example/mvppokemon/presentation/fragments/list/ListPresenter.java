@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
@@ -66,31 +67,33 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
 
             pokemonModelList = new ArrayList<>();
 
-            pokemonRepository.getAllLocalPokemonSortedById().subscribe(new DisposableObserver<PokemonModel>() {
-                @Override
-                public void onNext(PokemonModel value) {
-                    Timber.d("%s", value.getName());
-                    pokemonModelList.add(value);
-                }
+            pokemonRepository.getAllLocalPokemonSortedById()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableObserver<PokemonModel>() {
+                        @Override
+                        public void onNext(PokemonModel value) {
+                            Timber.d("%s", value.getName());
+                            pokemonModelList.add(value);
+                        }
 
-                @Override
-                public void onError(Throwable e) {
-                    Timber.d("onError");
-                    if (view != null) {
-                        onGenericError();
-                        view.setRefreshing(false);
-                    }
-                }
+                        @Override
+                        public void onError(Throwable e) {
+                            Timber.d("onError");
+                            if (view != null) {
+                                onGenericError();
+                                view.setRefreshing(false);
+                            }
+                        }
 
-                @Override
-                public void onComplete() {
-                    Timber.d("onComplete");
-                    if (view != null) {
-                        view.setElementsInAdapter(pokemonModelList);
-                        view.setRefreshing(false);
-                    }
-                }
-            });
+                        @Override
+                        public void onComplete() {
+                            Timber.d("onComplete");
+                            if (view != null) {
+                                view.setElementsInAdapter(pokemonModelList);
+                                view.setRefreshing(false);
+                            }
+                        }
+                    });
         }
     }
 

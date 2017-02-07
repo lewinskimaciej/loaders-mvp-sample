@@ -112,6 +112,7 @@ public final class ListFragment extends BaseFragment<ListPresenter, ListView> im
     public void addElementToAdapter(PokemonModel pokemon) {
         pokemonRecyclerViewAdapter.addPokemon(pokemon);
     }
+
     @Override
     public void setRefreshing(boolean visibility) {
         swipeRefreshLayout.setRefreshing(visibility);

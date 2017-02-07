@@ -3,7 +3,6 @@ package com.example.mvppokemon.data.repositories.pokemon.interfaces;
 import com.example.mvppokemon.data.models.PokemonModel;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 
 public interface PokemonDataSource {
     Observable<PokemonModel> getPokemon(long number);

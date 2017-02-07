@@ -18,6 +18,7 @@ package com.example.mvppokemon.common.jackson;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.requery.EntityStore;
 import io.requery.meta.EntityModel;
 
@@ -31,6 +32,7 @@ public class EntityMapper extends ObjectMapper {
 
     /**
      * Creates a new mapper instance.
+     *
      * @param model entity model being serialized
      * @param store entity store instance
      */
