@@ -1,6 +1,15 @@
 apply plugin: 'jacoco'
 jacoco {
-    toolVersion = "0.7.5.201505241946"
+    toolVersion = "0.7.9"
+}
+android {
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+    }
 }
 project.afterEvaluate {
     // Grab all build types and product flavors
@@ -35,6 +44,7 @@ project.afterEvaluate {
                                 '**/*$ViewBinder*.*',
                                 '**/BuildConfig.*',
                                 '**/Manifest*.*',
+                                '**/Abstract*.*',
                                 '**/*_*.**'
                         ]
                 )
