@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.requery.Persistable;
@@ -35,36 +36,25 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
     }
 
     @Override
-    public Observable<PokemonModel> savePokemon(final PokemonModel pokemonModel) {
-        List<StatsModel> tempList = new ArrayList<>(pokemonModel.getStats());
+    public Observable<PokemonModel> savePokemon(final PokemonModel pokemon) {
+        List<StatsModel> tempList = new ArrayList<>(pokemon.getStats());
 
-        pokemonModel.getStats().clear();
+        pokemon.getStats().clear();
 
-        for (StatsModel statsModel : tempList) {
-            pokemonModel.getStats().add(statsModel);
-        }
 
-        return database.upsert(pokemonModel)
+        return database.upsert(pokemon)
                 .toObservable()
+                .map(pokemonModel -> {
+                    for (StatsModel statsModel : tempList) {
+                        pokemonModel.getStats().add(statsModel);
+                    }
+                    database.update(pokemonModel)
+                            .subscribeOn(Schedulers.io())
+                            .subscribe();
+                    return pokemonModel;
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    private void updateAfterInserting(PokemonModel value) {
-        database.update(value)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableSingleObserver<PokemonModel>() {
-                    @Override
-                    public void onSuccess(PokemonModel value) {
-                        Timber.d("onSuccess fully inserted and updated");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.d("onError updating after insert");
-                    }
-                });
     }
 
     @Override

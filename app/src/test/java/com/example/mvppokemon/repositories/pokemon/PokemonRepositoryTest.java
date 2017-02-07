@@ -5,21 +5,32 @@ import com.example.mvppokemon.data.repositories.pokemon.PokemonRepository;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonDataSource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.hamcrest.core.IsNot;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
+import io.requery.Entity;
+import io.requery.Persistable;
+import io.requery.reactivex.ReactiveEntityStore;
 import timber.log.Timber;
 
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 public class PokemonRepositoryTest {
@@ -31,13 +42,13 @@ public class PokemonRepositoryTest {
     PokemonDataSource remoteDataSource;
 
     //SUT
-    PokemonRepository pokemonRepository;
+    private PokemonRepository pokemonRepository;
 
     // mock values to return from data sources
-    List<PokemonModel> pokemonList = setUpFakePokemonList();
+    private List<PokemonModel> pokemonList = setUpFakePokemonList();
 
     @Before
-    public void prepareDatabase() {
+    public void setup() {
         MockitoAnnotations.initMocks(this);
 
         pokemonRepository = new PokemonRepository(remoteDataSource, localDataSource);
@@ -120,7 +131,7 @@ public class PokemonRepositoryTest {
                 .subscribe(observerPokemonFound);
 
         // returns no values
-        observerPokemonFound.assertValueCount(0);
+        observerPokemonFound.assertNoValues();
         observerPokemonFound.assertComplete();
     }
 
@@ -148,7 +159,7 @@ public class PokemonRepositoryTest {
 
         pokemonRepository.getAllLocalPokemonSortedById().subscribe(observerPokemonFound);
 
-        observerPokemonFound.assertValueCount(0);
+        observerPokemonFound.assertNoValues();
         observerPokemonFound.assertComplete();
     }
 
@@ -156,23 +167,10 @@ public class PokemonRepositoryTest {
     public void saveNewPokemon() {
         PokemonModel pokemonModel = pokemonList.get(0);
 
-        // remote source has data available
-        setOnePokemonAvailable(remoteDataSource, pokemonModel);
-        // local source has data available
-        setNoPokemonAvailable(localDataSource);
         // make savePokemon function in DataStore return the saved pokemon
         setSavePokemonToReturnValue(localDataSource, pokemonModel);
 
-        TestObserver<PokemonModel> observerBeforeInserting = new TestObserver<>();
         TestObserver<PokemonModel> observerInserting = new TestObserver<>();
-        TestObserver<PokemonModel> observerAfterInserting = new TestObserver<>();
-
-//        TODO: change implementation of getPokemon so it passes after uncommenting
-//        // check that it doesn't exist
-//        pokemonRepository.getPokemon(pokemonModel.getId()).subscribe(observerBeforeInserting);
-//
-//        observerBeforeInserting.assertValueCount(1);
-//        observerBeforeInserting.assertComplete();
 
         // insert
         pokemonRepository.savePokemon(pokemonModel).subscribe(observerInserting);
@@ -180,13 +178,38 @@ public class PokemonRepositoryTest {
         observerInserting.assertValueCount(1);
         observerInserting.assertValue(pokemonModel);
         observerInserting.assertComplete();
+    }
 
-//        // check if it now exists
-//        pokemonRepository.getPokemon(pokemonModel.getId()).subscribe(observerAfterInserting);
-//
-//        observerAfterInserting.assertValueCount(1);
-//        observerAfterInserting.assertValue(pokemonModel);
-//        observerAfterInserting.assertComplete();
+    @Test
+    public void saveExistingPokemon() {
+        PokemonModel pokemonModel = pokemonList.get(0);
+
+        // make savePokemon function in DataStore return the saved pokemon
+        setSavePokemonToReturnValue(localDataSource, pokemonModel);
+
+        TestObserver<PokemonModel> observerInserting = new TestObserver<>();
+        TestObserver<PokemonModel> observerUpdating = new TestObserver<>();
+
+        // insert first
+        pokemonRepository.savePokemon(pokemonModel).subscribe(observerInserting);
+        observerInserting.assertValueCount(1);
+        observerInserting.assertValue(pokemonModel);
+        observerInserting.assertComplete();
+
+        String nameBefore = observerInserting.values().get(0).getName();
+
+        pokemonModel.setName("CHANGED");
+        // update
+        pokemonRepository.savePokemon(pokemonModel).subscribe(observerUpdating);
+
+        String nameAfter = observerUpdating.values().get(0).getName();
+
+        observerUpdating.assertValueCount(1);
+        observerUpdating.assertValue(pokemonModel);
+        observerUpdating.assertComplete();
+
+        // returned names have to be different
+        assertNotEquals(nameBefore, nameAfter);
     }
 
     private void setOnePokemonAvailable(PokemonDataSource dataSource, PokemonModel pokemonModel) {
@@ -212,7 +235,7 @@ public class PokemonRepositoryTest {
     }
 
     private void omitSavingPokemonAction() {
-        when(pokemonRepository.savePokemon(anyObject())).thenReturn(Observable.empty());
+        when(localDataSource.savePokemon(anyObject())).thenReturn(Observable.empty());
     }
 
     private List<PokemonModel> setUpFakePokemonList() {

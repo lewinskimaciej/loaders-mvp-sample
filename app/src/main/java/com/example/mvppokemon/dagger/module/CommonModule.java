@@ -4,11 +4,13 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.example.mvppokemon.common.jackson.EntityMapper;
 import com.example.mvppokemon.dagger.qualifier.AuthenticationInterceptor;
 import com.example.mvppokemon.dagger.qualifier.CachedOkHttpClient;
 import com.example.mvppokemon.dagger.qualifier.CachedRetrofit;
 import com.example.mvppokemon.dagger.qualifier.NonCachedOkHttpClient;
 import com.example.mvppokemon.dagger.qualifier.NonCachedRetrofit;
+import com.example.mvppokemon.data.models.Models;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
@@ -18,6 +20,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.requery.Persistable;
+import io.requery.reactivex.ReactiveEntityStore;
 import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -75,8 +79,8 @@ public final class CommonModule {
 
     @Provides
     @Singleton
-    ObjectMapper provideObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper provideObjectMapper(ReactiveEntityStore<Persistable> dataStore) {
+        ObjectMapper objectMapper = new EntityMapper(Models.DEFAULT, dataStore);
         objectMapper.registerModule(new JodaModule())
                 .writerWithDefaultPrettyPrinter();
         objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)

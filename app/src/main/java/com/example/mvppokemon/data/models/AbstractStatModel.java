@@ -2,7 +2,9 @@ package com.example.mvppokemon.data.models;
 
 import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import io.requery.CascadeAction;
 import io.requery.Entity;

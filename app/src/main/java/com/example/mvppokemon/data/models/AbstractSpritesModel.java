@@ -2,6 +2,7 @@ package com.example.mvppokemon.data.models;
 
 import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.requery.CascadeAction;
@@ -24,9 +25,9 @@ public abstract class AbstractSpritesModel implements Parcelable, Persistable {
     @Generated
     long id;
 
-    @OneToOne(mappedBy = "sprites", cascade = {CascadeAction.DELETE, CascadeAction.SAVE})
-    PokemonModel pokemonModel;
-
     @JsonProperty("front_default")
     String frontDefault;
+
+    @OneToOne(mappedBy = "sprites", cascade = {CascadeAction.DELETE, CascadeAction.SAVE})
+    PokemonModel pokemonModel;
 }

@@ -2,6 +2,7 @@ package com.example.mvppokemon.data.models;
 
 import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
@@ -9,7 +10,9 @@ import java.util.List;
 import io.requery.CascadeAction;
 import io.requery.Entity;
 import io.requery.ForeignKey;
+import io.requery.Generated;
 import io.requery.Key;
+import io.requery.ManyToOne;
 import io.requery.OneToMany;
 import io.requery.OneToOne;
 import io.requery.Persistable;

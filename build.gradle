@@ -60,7 +60,7 @@ ext {
     jacksonVersion = '2.8.6'
     //
     glideVersion = '3.7.0'
-    requeryVersion = '1.1.1'
+    requeryVersion = '1.1.2'
     eventBusVersion = '3.0.0'
     leakCanaryBusVersion = '1.5'
 }
