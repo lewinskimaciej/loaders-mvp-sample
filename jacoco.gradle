@@ -45,6 +45,7 @@ project.afterEvaluate {
                                 '**/BuildConfig.*',
                                 '**/Manifest*.*',
                                 '**/Abstract*.*',
+                                '**/*Module.*',
                                 '**/*_*.**'
                         ]
                 )
