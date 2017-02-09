@@ -78,7 +78,7 @@ dependencies {
     // Network
     compile "com.squareup.okhttp3:okhttp:$rootProject.ext.okHttpVersion"
     compile "com.squareup.okhttp3:okhttp-urlconnection:$rootProject.ext.okHttpVersion"
-    compile "com.squareup.okhttp3:logging-interceptor:$rootProject.ext.okHttpLoggerVersion"
+    compile "com.squareup.okhttp3:logging-interceptor:$rootProject.ext.okHttpVersion"
     compile "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofitVersion"
     compile "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rootProject.ext.retrofit2RxJava2AdapterVersion"
     compile "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofitVersion"
@@ -155,6 +155,7 @@ dependencies {
     testCompile "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"
     testCompile "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrestVersion"
     testCompile "org.robolectric:robolectric:$rootProject.ext.roboelectricVersion"
+    testCompile "com.squareup.okhttp3:mockwebserver:$rootProject.ext.okHttpVersion"
 
     //
     // Android Testing Support Library's runner and rules

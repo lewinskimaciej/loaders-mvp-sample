@@ -24,6 +24,8 @@ import timber.log.Timber;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class PokemonRepositoryTest {
@@ -69,6 +71,9 @@ public class PokemonRepositoryTest {
                 .observeOn(Schedulers.trampoline())
                 .subscribe(observerPokemonFound);
 
+        verify(localDataSource).getPokemon(pokemonModel.getId());
+        verify(remoteDataSource).getPokemon(pokemonModel.getId());
+
         observerPokemonFound.assertValue(pokemonModel);
         observerPokemonFound.assertValueCount(1);
         observerPokemonFound.assertComplete();
@@ -90,6 +95,9 @@ public class PokemonRepositoryTest {
         pokemonRepository.getPokemon(pokemonModel.getId())
                 .observeOn(Schedulers.trampoline())
                 .subscribe(observerPokemonFound);
+
+        verify(localDataSource).getPokemon(pokemonModel.getId());
+        verify(remoteDataSource).getPokemon(pokemonModel.getId());
 
         observerPokemonFound.assertValue(pokemonModel);
         observerPokemonFound.assertValueCount(1);
@@ -113,6 +121,9 @@ public class PokemonRepositoryTest {
                 .observeOn(Schedulers.trampoline())
                 .subscribe(observerPokemonFound);
 
+        verify(localDataSource).getPokemon(pokemonModel.getId());
+        verify(remoteDataSource).getPokemon(pokemonModel.getId());
+
         // returns 2 values, local and remote
         observerPokemonFound.assertValues(pokemonModel, pokemonModel);
         observerPokemonFound.assertValueCount(2);
@@ -134,6 +145,9 @@ public class PokemonRepositoryTest {
                 .observeOn(Schedulers.trampoline())
                 .subscribe(observerPokemonFound);
 
+        verify(localDataSource).getPokemon(pokemonModel.getId());
+        verify(remoteDataSource).getPokemon(pokemonModel.getId());
+
         // returns no values
         observerPokemonFound.assertNoValues();
         observerPokemonFound.assertComplete();
@@ -149,6 +163,8 @@ public class PokemonRepositoryTest {
         pokemonRepository.getAllLocalPokemonSortedById()
                 .observeOn(Schedulers.trampoline())
                 .subscribe(observerPokemonFound);
+
+        verify(localDataSource).getAllLocalPokemonSortedById();
 
         observerPokemonFound.assertValueCount(pokemonList.size());
         // order in list: 1, 3, 2, sorted order: 1, 2, 3
@@ -167,6 +183,8 @@ public class PokemonRepositoryTest {
                 .observeOn(Schedulers.trampoline())
                 .subscribe(observerPokemonFound);
 
+        verify(localDataSource).getAllLocalPokemonSortedById();
+
         observerPokemonFound.assertNoValues();
         observerPokemonFound.assertComplete();
     }
@@ -184,6 +202,8 @@ public class PokemonRepositoryTest {
         pokemonRepository.savePokemon(pokemonModel)
                 .observeOn(Schedulers.trampoline())
                 .subscribe(observerInserting);
+
+        verify(localDataSource).savePokemon(pokemonModel);
 
         observerInserting.assertValueCount(1);
         observerInserting.assertValue(pokemonModel);
@@ -217,6 +237,8 @@ public class PokemonRepositoryTest {
                 .subscribe(observerUpdating);
 
         String nameAfter = observerUpdating.values().get(0).getName();
+
+        verify(localDataSource, times(2)).savePokemon(pokemonModel);
 
         observerUpdating.assertValueCount(1);
         observerUpdating.assertValue(pokemonModel);

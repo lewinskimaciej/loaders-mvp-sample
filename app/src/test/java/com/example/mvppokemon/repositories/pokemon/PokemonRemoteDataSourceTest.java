@@ -1,22 +1,18 @@
 package com.example.mvppokemon.repositories.pokemon;
 
-import android.content.Context;
-
-import com.example.mvppokemon.BuildConfig;
-import com.example.mvppokemon.data.models.Models;
 import com.example.mvppokemon.data.models.PokemonModel;
-import com.example.mvppokemon.data.models.StatsModel;
-import com.example.mvppokemon.data.repositories.pokemon.PokemonLocalDataSource;
+import com.example.mvppokemon.data.repositories.pokemon.PokemonRemoteDataSource;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonDataSource;
+import com.example.mvppokemon.data.retrofit.PokemonRetrofitInterface;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
+import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,71 +22,74 @@ import java.util.concurrent.CountDownLatch;
 import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.schedulers.Schedulers;
-import io.requery.Persistable;
-import io.requery.android.sqlite.DatabaseSource;
-import io.requery.reactivex.ReactiveEntityStore;
-import io.requery.reactivex.ReactiveSupport;
-import io.requery.sql.Configuration;
-import io.requery.sql.EntityDataStore;
-import io.requery.sql.TableCreationMode;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import retrofit2.Retrofit;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 import timber.log.Timber;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
 
-@RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
-public class PokemonLocalDataSourceTest {
-
-    private Context context;
-
-    private ReactiveEntityStore<Persistable> dataStore;
+public class PokemonRemoteDataSourceTest {
 
     private List<PokemonModel> pokemonList = setUpFakePokemonList();
 
+    private MockWebServer server;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     // SUT
-    private PokemonDataSource pokemonLocalDataSource;
+    private PokemonDataSource pokemonRemoteDataSource;
 
     @Before
     public void setup() {
-        context = RuntimeEnvironment.application;
+        MockitoAnnotations.initMocks(this);
 
-        DatabaseSource source = new DatabaseSource(context, Models.DEFAULT, 1);
-        source.setTableCreationMode(TableCreationMode.DROP_CREATE);
-        source.setLoggingEnabled(true);
+        server = new MockWebServer();
 
-        Configuration configuration = source.getConfiguration();
-        dataStore = ReactiveSupport.toReactiveStore(
-                new EntityDataStore<Persistable>(configuration));
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(JacksonConverterFactory.create(new ObjectMapper()))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .baseUrl(server.url("").toString())
+                .build();
 
-        pokemonLocalDataSource = new PokemonLocalDataSource(dataStore);
+        PokemonRetrofitInterface pokemonRetrofitInterface = retrofit.create(PokemonRetrofitInterface.class);
+
+        pokemonRemoteDataSource = new PokemonRemoteDataSource(pokemonRetrofitInterface);
 
         RxAndroidPlugins.setInitMainThreadSchedulerHandler(__ -> Schedulers.trampoline());
     }
 
     @After
     public void teardown() {
-        if (dataStore != null) {
-            dataStore.delete(PokemonModel.class);
-            dataStore.close();
-        }
         RxAndroidPlugins.reset();
+
+        try {
+            server.close();
+        } catch (IOException e) {
+            Timber.d(e);
+        }
     }
 
     @Test
     public void getOnePokemonThatExists() {
         PokemonModel pokemonModel = pokemonList.get(0);
 
-        insertPokemon(pokemonModel);
+        try {
+            setFakePokemonForGet(pokemonModel);
+        } catch (JsonProcessingException e) {
+            Timber.d(e);
+        }
 
         TestObserver<PokemonModel> observerPokemon = new TestObserver<>();
 
         CountDownLatch countDownLatch = new CountDownLatch(1);
 
-        pokemonLocalDataSource.getPokemon(pokemonModel.getId())
+        pokemonRemoteDataSource.getPokemon(pokemonModel.getId())
                 .doOnError(throwable -> countDownLatch.countDown())
                 .doOnComplete(countDownLatch::countDown)
                 .subscribe(observerPokemon);
+
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
@@ -105,134 +104,92 @@ public class PokemonLocalDataSourceTest {
     public void failToGetOnePokemonThatDoesNotExist() {
         PokemonModel pokemonModel = pokemonList.get(0);
 
+        setNoPokemonAvailable();
+
         TestObserver<PokemonModel> observerPokemon = new TestObserver<>();
 
         CountDownLatch countDownLatch = new CountDownLatch(1);
 
-        pokemonLocalDataSource.getPokemon(pokemonModel.getId())
+        pokemonRemoteDataSource.getPokemon(pokemonModel.getId())
                 .doOnError(throwable -> countDownLatch.countDown())
                 .doOnComplete(countDownLatch::countDown)
                 .subscribe(observerPokemon);
+
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
             Timber.d(e);
         }
-        observerPokemon.assertValueCount(0);
-        observerPokemon.assertComplete();
+        observerPokemon.assertError(HttpException.class);
+        HttpException exception = (HttpException) observerPokemon.errors().get(0);
+
+        assertEquals(exception.code(), 404);
     }
 
     @Test
-    public void saveNewPokemon() {
+    public void savePokemon() {
         PokemonModel pokemonModel = pokemonList.get(0);
 
         TestObserver<PokemonModel> observerPokemon = new TestObserver<>();
 
         CountDownLatch countDownLatch = new CountDownLatch(1);
 
-        PokemonModel pokemonBefore = getPokemon(pokemonModel.getId());
-
-        // pokemon does not exist yet
-        assertNull(pokemonBefore);
-
-        // insert it
-        pokemonLocalDataSource.savePokemon(pokemonModel)
+        pokemonRemoteDataSource.savePokemon(pokemonModel)
                 .doOnError(throwable -> countDownLatch.countDown())
                 .doOnComplete(countDownLatch::countDown)
                 .subscribe(observerPokemon);
+
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
             Timber.d(e);
         }
+        observerPokemon.assertError(Throwable.class);
 
-        // check if insertion was successful
-        observerPokemon.assertValue(pokemonModel);
-        observerPokemon.assertValueCount(1);
-        observerPokemon.assertComplete();
-
-        PokemonModel pokemonAfter = getPokemon(pokemonModel.getId());
-        // check if pokemon was actually inserted
-        assertEquals(pokemonModel, pokemonAfter);
-    }
-
-    @Test
-    public void updateExistingPokemon() {
-        PokemonModel pokemonModel = pokemonList.get(0);
-
-        TestObserver<PokemonModel> observerPokemon = new TestObserver<>();
-
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-
-        insertPokemon(pokemonModel);
-
-        // insert it
-        pokemonLocalDataSource.savePokemon(pokemonModel)
-                .doOnError(throwable -> countDownLatch.countDown())
-                .doOnComplete(countDownLatch::countDown)
-                .subscribe(observerPokemon);
-        try {
-            countDownLatch.await();
-        } catch (InterruptedException e) {
-            Timber.d(e);
-        }
-
-        // check if insertion was successful
-        observerPokemon.assertValue(pokemonModel);
-        observerPokemon.assertValueCount(1);
-        observerPokemon.assertComplete();
-
-        PokemonModel pokemonAfter = getPokemon(pokemonModel.getId());
-        // check if pokemon was actually inserted
-        assertEquals(pokemonModel, pokemonAfter);
+        Throwable exception = observerPokemon.errors().get(0);
+        assertEquals(exception.getMessage(), PokemonRemoteDataSource.METHOD_NOT_AVAILABLE);
     }
 
     @Test
     public void getAllPokemonSortedById() {
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-
-        for (PokemonModel pokemonModel : pokemonList) {
-            insertPokemon(pokemonModel);
-        }
-
         TestObserver<PokemonModel> observerPokemon = new TestObserver<>();
 
-        // insert it
-        pokemonLocalDataSource.getAllLocalPokemonSortedById()
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        pokemonRemoteDataSource.getAllLocalPokemonSortedById()
                 .doOnError(throwable -> countDownLatch.countDown())
                 .doOnComplete(countDownLatch::countDown)
                 .subscribe(observerPokemon);
+
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
             Timber.d(e);
         }
+        observerPokemon.assertError(Throwable.class);
 
-        observerPokemon.assertValueCount(pokemonList.size());
-        // test if order is correct
-        observerPokemon.assertValues(pokemonList.get(0), pokemonList.get(2), pokemonList.get(1));
-        observerPokemon.assertComplete();
+        Throwable exception = observerPokemon.errors().get(0);
+        assertEquals(exception.getMessage(), PokemonRemoteDataSource.METHOD_NOT_AVAILABLE);
     }
 
-    @Test
-    public void getNoPokemon() {
-        CountDownLatch countDownLatch = new CountDownLatch(1);
+    private void setFakePokemonForGet(PokemonModel pokemonModel) throws JsonProcessingException {
 
-        TestObserver<PokemonModel> observerPokemon = new TestObserver<>();
+        MockResponse mockResponse = new MockResponse();
 
-        // insert it
-        pokemonLocalDataSource.getAllLocalPokemonSortedById()
-                .doOnError(throwable -> countDownLatch.countDown())
-                .doOnComplete(countDownLatch::countDown)
-                .subscribe(observerPokemon);
-        try {
-            countDownLatch.await();
-        } catch (InterruptedException e) {
-            Timber.d(e);
-        }
+        mockResponse.setResponseCode(200)
+                .setBody(objectMapper.writeValueAsString(pokemonModel));
 
-        observerPokemon.assertValueCount(0);
-        observerPokemon.assertComplete();
+        server.enqueue(mockResponse);
+    }
+
+    private void setNoPokemonAvailable() {
+
+        MockResponse mockResponse = new MockResponse();
+
+        mockResponse.setResponseCode(404)
+                .setBody("{\"detail\":\"Not found.\"}");
+
+        server.enqueue(mockResponse);
     }
 
     private List<PokemonModel> setUpFakePokemonList() {
@@ -249,30 +206,12 @@ public class PokemonLocalDataSourceTest {
 
             // ordered incorrectly to test sorting
             list.add(pokemon1);
-            list.add(pokemon3);
             list.add(pokemon2);
+            list.add(pokemon3);
         } catch (IOException e) {
             Timber.d(e);
         }
 
         return list;
-    }
-
-    private void insertPokemon(PokemonModel pokemonModel) {
-        List<StatsModel> tempList = new ArrayList<>(pokemonModel.getStats());
-
-        pokemonModel.getStats().clear();
-
-        PokemonModel value = dataStore.insert(pokemonModel).blockingGet();
-
-        for (StatsModel statsModel : tempList) {
-            pokemonModel.getStats().add(statsModel);
-        }
-        dataStore.update(value).blockingGet();
-        Timber.d("inserted pokemon to test");
-    }
-
-    private PokemonModel getPokemon(long pokemonId) {
-        return dataStore.findByKey(PokemonModel.class, pokemonId).blockingGet();
     }
 }

@@ -6,11 +6,6 @@ import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-/**
- * Created on 10.01.2017.
- *
- * @author Maciej Lewinski
- */
 
 public interface PokemonRetrofitInterface {
     @GET("pokemon/{number}")

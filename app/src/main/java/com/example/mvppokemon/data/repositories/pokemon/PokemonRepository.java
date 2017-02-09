@@ -28,10 +28,8 @@ public final class PokemonRepository implements PokemonRepositoryInterface {
     public Observable<PokemonModel> getPokemon(long number) {
         return pokemonRemoteDataSource.getPokemon(number)
                 .map(pokemonModel -> {
-                    if (pokemonLocalDataSource != null) {
-                        savePokemon(pokemonModel).observeOn(AndroidSchedulers.mainThread())
-                                .subscribe();
-                    }
+                    savePokemon(pokemonModel)
+                            .subscribe();
                     return pokemonModel;
                 })
                 .mergeWith(pokemonLocalDataSource.getPokemon(number));

@@ -12,6 +12,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public final class PokemonRemoteDataSource implements PokemonDataSource {
 
+    public static final String METHOD_NOT_AVAILABLE = "Method not available for remote";
+
     PokemonRetrofitInterface pokemonRetrofitInterface;
 
     @Inject
@@ -22,8 +24,7 @@ public final class PokemonRemoteDataSource implements PokemonDataSource {
     @Override
     public Observable<PokemonModel> getPokemon(long number) {
         return pokemonRetrofitInterface.getPokemon(number)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.io());
     }
 
     /**
@@ -33,7 +34,7 @@ public final class PokemonRemoteDataSource implements PokemonDataSource {
     @Override
     public Observable<PokemonModel> savePokemon(PokemonModel pokemonModel) {
         // cannot save in remote
-        return Observable.error(new Throwable("Cannot save in API"));
+        return Observable.error(new Throwable(METHOD_NOT_AVAILABLE));
     }
 
     /**
@@ -43,7 +44,7 @@ public final class PokemonRemoteDataSource implements PokemonDataSource {
     @Override
     public Observable<PokemonModel> getAllLocalPokemonSortedById() {
         // api has no method to get more than one at a time
-        return Observable.error(new Throwable("Cannot get all Pokemon at once from API."));
+        return Observable.error(new Throwable(METHOD_NOT_AVAILABLE));
     }
 
 }

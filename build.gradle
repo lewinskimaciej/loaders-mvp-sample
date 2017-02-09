@@ -56,8 +56,7 @@ ext {
     rxBindingVersion = '0.4.0'
     retrofit2RxJava2AdapterVersion = '1.0.0'
     retrofitVersion = '2.1.0'
-    okHttpVersion = '3.5.0'
-    okHttpLoggerVersion = '3.5.0'
+    okHttpVersion = '3.6.0'
     jacksonVersion = '2.8.6'
     //
     glideVersion = '3.7.0'
