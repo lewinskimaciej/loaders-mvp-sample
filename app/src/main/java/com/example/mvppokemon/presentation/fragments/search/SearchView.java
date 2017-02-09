@@ -2,6 +2,8 @@ package com.example.mvppokemon.presentation.fragments.search;
 
 import android.support.annotation.UiThread;
 
+import com.example.mvppokemon.data.models.PokemonModel;
+
 @UiThread
 public interface SearchView {
 
@@ -11,7 +13,9 @@ public interface SearchView {
 
     void setPokemonSprite(String url);
 
-    void setPokemonBackgroundVisbility(boolean visbile);
+    void setPokemonBackgroundVisbility(boolean visible);
 
     void setButtonEnabled(boolean enabled);
+
+    void startPokemonActivity(PokemonModel pokemonModel);
 }

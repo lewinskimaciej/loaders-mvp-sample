@@ -1,5 +1,7 @@
 package com.example.mvppokemon.presentation.fragments.search;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,8 +16,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mvppokemon.R;
+import com.example.mvppokemon.common.dictionaries.BundleKey;
 import com.example.mvppokemon.dagger.component.ApplicationComponent;
+import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.PokemonRepositoryModule;
+import com.example.mvppokemon.presentation.activities.pokemon.PokemonActivity;
 import com.example.mvppokemon.presentation.base.BaseFragment;
 import com.example.mvppokemon.presentation.base.PresenterFactory;
 import com.example.mvppokemon.presentation.fragments.search.dagger.DaggerSearchViewComponent;
@@ -109,8 +114,8 @@ public final class SearchFragment extends BaseFragment<SearchPresenter, SearchVi
     }
 
     @Override
-    public void setPokemonBackgroundVisbility(boolean visbile) {
-        if (visbile) {
+    public void setPokemonBackgroundVisbility(boolean visible) {
+        if (visible) {
             pokemonContainer.setVisibility(View.VISIBLE);
         } else {
             pokemonContainer.setVisibility(View.GONE);
@@ -120,6 +125,16 @@ public final class SearchFragment extends BaseFragment<SearchPresenter, SearchVi
     @Override
     public void setButtonEnabled(boolean enabled) {
         button.setEnabled(enabled);
+    }
+
+    @Override
+    public void startPokemonActivity(PokemonModel pokemonModel) {
+        Context context = getActivity();
+        Intent intent = new Intent(context, PokemonActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putLong(BundleKey.KEY_POKEMON_ID, pokemonModel.getId());
+        intent.putExtras(bundle);
+        context.startActivity(intent);
     }
 
     @OnClick(R.id.button)
@@ -133,7 +148,7 @@ public final class SearchFragment extends BaseFragment<SearchPresenter, SearchVi
     @OnClick(R.id.pokemon_container)
     public void onPokemonClick() {
         if (presenter != null) {
-            presenter.pokemonClicked(getActivity());
+            presenter.pokemonClicked();
         }
     }
 }
