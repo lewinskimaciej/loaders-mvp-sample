@@ -48,7 +48,7 @@ ext {
     espressoVersion = '2.2.2'
     dexmakerVersion = '1.2'
     //
-    daggerVersion = '2.7'
+    daggerVersion = '2.9'
     jsr250Version = '1.0'
     //
     rxAndroidVersion = '2.0.0'
