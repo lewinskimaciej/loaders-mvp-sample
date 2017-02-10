@@ -34,7 +34,7 @@ public class SearchPresenterTest {
     @Mock
     SearchView searchView;
 
-    private SearchPresenter searchPresenter;
+    private SearchPresenterInterface searchPresenter;
 
     @Before
     public void setup() {
