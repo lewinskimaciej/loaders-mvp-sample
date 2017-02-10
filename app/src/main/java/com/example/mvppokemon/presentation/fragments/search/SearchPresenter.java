@@ -43,8 +43,7 @@ public final class SearchPresenter extends BasePresenter<SearchView> implements 
                         @Override
                         public void onNext(PokemonModel value) {
                             Timber.d("Pokemon name: %s", String.valueOf(value.getName()));
-                            currentPokemon = value;
-                            setPokemonData(currentPokemon);
+                            setPokemonData(value);
                             view.setButtonEnabled(true);
                         }
 
@@ -83,12 +82,11 @@ public final class SearchPresenter extends BasePresenter<SearchView> implements 
         }
     }
 
-    private void setPokemonData(PokemonModel pokemonData) {
+    @Override
+    public void setPokemonData(PokemonModel pokemonData) {
         if (view != null && pokemonData != null) {
-            view.setPokemonName(pokemonData.getName());
-            view.setPokemonNumber(pokemonData.getId());
-            view.setPokemonSprite(pokemonData.getSprites().getFrontDefault());
-            view.setPokemonBackgroundVisbility(true);
+            currentPokemon = pokemonData;
+            view.setPokemon(pokemonData);
         }
     }
 

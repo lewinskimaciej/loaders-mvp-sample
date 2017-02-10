@@ -97,28 +97,15 @@ public final class SearchFragment extends BaseFragment<SearchPresenter, SearchVi
     }
 
     @Override
-    public void setPokemonNumber(long number) {
-        pokemonNumber.setText(String.valueOf(number));
-    }
+    public void setPokemon(PokemonModel pokemon) {
+        pokemonContainer.setVisibility(View.VISIBLE);
+        pokemonNumber.setText(String.valueOf(pokemon.getId()));
+        pokemonName.setText(pokemon.getName());
 
-    @Override
-    public void setPokemonName(String name) {
-        pokemonName.setText(name);
-    }
-
-    @Override
-    public void setPokemonSprite(String url) {
-        Glide.with(this)
-                .load(url)
-                .into(pokemonSprite);
-    }
-
-    @Override
-    public void setPokemonBackgroundVisbility(boolean visible) {
-        if (visible) {
-            pokemonContainer.setVisibility(View.VISIBLE);
-        } else {
-            pokemonContainer.setVisibility(View.GONE);
+        if (pokemon.getSprites() != null) {
+            Glide.with(this)
+                    .load(pokemon.getSprites().getFrontDefault())
+                    .into(pokemonSprite);
         }
     }
 

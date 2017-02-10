@@ -18,6 +18,8 @@ import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,51 +48,103 @@ public class SearchPresenterTest {
         searchPresenter.onStart(true);
     }
 
+
+    @Test
+    public void setPokemon() {
+        PokemonModel pokemonModel = pokemonList.get(0);
+
+        searchPresenter.setPokemonData(pokemonModel);
+
+        verify(searchView).setPokemon(pokemonModel);
+    }
+
     @Test
     public void initialSetup() {
         PokemonModel pokemonModel = pokemonList.get(0);
 
-        setPokemonToGet(pokemonModel.getId());
-        // find pokemon
-        searchPresenter.getPokemon((int) pokemonModel.getId());
+        // set pokemon so it remembers the last search when changing configuration
+        searchPresenter.setPokemonData(pokemonModel);
+
         // simulate configuration change
         // and check if presenter sets pokemon
         searchPresenter.onStart(false);
 
-        // pokemon should be set up on view two times, once from local, once from remote
-        verify(searchView, times(2)).setPokemonBackgroundVisbility(true);
-        verify(searchView, times(2)).setPokemonName(pokemonModel.getName());
-        verify(searchView, times(2)).setPokemonNumber(pokemonModel.getId());
-        verify(searchView, times(2)).setPokemonSprite(pokemonModel.getSprites().getFrontDefault());
+        // pokemon should be set up on view two times, when setting pokemon for the first time
+        // and when changing configuration
+        verify(searchView, times(2)).setPokemon(pokemonModel);
     }
 
     @Test
     public void pokemonClicked() {
         PokemonModel pokemonModel = pokemonList.get(0);
 
-        setPokemonToGet(pokemonModel.getId());
+        setPokemonToGetFromDataSources(pokemonModel, 2);
 
         // just to set pokemon as current
-        searchPresenter.getPokemon((int) pokemonModel.getId());
+        searchPresenter.setPokemonData(pokemonModel);
 
         // simulate clicking pokemon
         searchPresenter.pokemonClicked();
 
+        //check if proper method was started
         verify(searchView).startPokemonActivity(pokemonModel);
     }
 
-    private void setPokemonToGet(long number) {
-        PokemonModel pokemon = null;
-        for (PokemonModel pokemonModel : pokemonList) {
-            if (pokemonModel.getId() == number) {
-                pokemon = pokemonModel;
-                break;
+    @Test
+    public void getPokemonfromBothDataSources() {
+        PokemonModel pokemonModel = pokemonList.get(0);
+
+        setPokemonToGetFromDataSources(pokemonModel, 2);
+
+        searchPresenter.getPokemon((int) pokemonModel.getId());
+
+        verify(pokemonRepository).getPokemon(pokemonModel.getId());
+        //set two times, when local data comes, then remote
+        verify(searchView, times(2)).setPokemon(pokemonModel);
+    }
+
+    @Test
+    public void getPokemonfromOneSource() {
+        PokemonModel pokemonModel = pokemonList.get(0);
+
+        // one of the sources does not have needed data
+        setPokemonToGetFromDataSources(pokemonModel, 1);
+
+        searchPresenter.getPokemon((int) pokemonModel.getId());
+
+        verify(pokemonRepository).getPokemon(pokemonModel.getId());
+        //set two times, when local data comes, then remote
+        verify(searchView).setPokemon(pokemonModel);
+    }
+
+    @Test
+    public void changeButtonStateWhenGettingPokemon() {
+        PokemonModel pokemonModel = pokemonList.get(0);
+
+        setPokemonToGetFromDataSources(pokemonModel, 2);
+
+        searchPresenter.getPokemon((int) pokemonModel.getId());
+
+        verify(searchView).setButtonEnabled(false);
+        // might be called multiple times if data comes from local and remote,
+        // or only once if there's no data and only onComplete is called
+        verify(searchView, atLeast(1)).setButtonEnabled(true);
+    }
+
+    private void setPokemonToGetFromDataSources(PokemonModel pokemonToGet, int numberOfSources) {
+        if (pokemonToGet != null) {
+            // from local data source and remote data source
+
+            List<PokemonModel> list = new ArrayList<>();
+            for (int i = 0; i < numberOfSources; i++) {
+                list.add(pokemonToGet);
             }
-        }
-        if (pokemon != null) {
-            when(pokemonRepository.getPokemon(number)).thenReturn(Observable.just(pokemon));
+
+            when(pokemonRepository.getPokemon(pokemonToGet.getId()))
+                    .thenReturn(Observable.fromIterable(list));
         } else {
-            when(pokemonRepository.getPokemon(number)).thenReturn(Observable.empty());
+            when(pokemonRepository.getPokemon(anyLong()))
+                    .thenReturn(Observable.empty());
         }
     }
 

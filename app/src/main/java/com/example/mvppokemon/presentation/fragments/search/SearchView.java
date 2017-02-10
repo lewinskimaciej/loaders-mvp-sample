@@ -7,13 +7,7 @@ import com.example.mvppokemon.data.models.PokemonModel;
 @UiThread
 public interface SearchView {
 
-    void setPokemonNumber(long number);
-
-    void setPokemonName(String name);
-
-    void setPokemonSprite(String url);
-
-    void setPokemonBackgroundVisbility(boolean visible);
+    void setPokemon(PokemonModel pokemon);
 
     void setButtonEnabled(boolean enabled);
 
