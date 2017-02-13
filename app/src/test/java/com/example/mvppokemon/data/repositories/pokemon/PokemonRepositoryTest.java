@@ -67,7 +67,7 @@ public class PokemonRepositoryTest {
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
 
         pokemonRepository.getPokemon(pokemonModel.getId())
-                .observeOn(Schedulers.trampoline())
+                .observeOn(new TestScheduler())
                 .subscribe(observerPokemonFound);
 
         verify(localDataSource).getPokemon(pokemonModel.getId());
@@ -92,7 +92,7 @@ public class PokemonRepositoryTest {
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
 
         pokemonRepository.getPokemon(pokemonModel.getId())
-                .observeOn(Schedulers.trampoline())
+                .observeOn(new TestScheduler())
                 .subscribe(observerPokemonFound);
 
         verify(localDataSource).getPokemon(pokemonModel.getId());
@@ -117,7 +117,7 @@ public class PokemonRepositoryTest {
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
 
         pokemonRepository.getPokemon(pokemonModel.getId())
-                .observeOn(Schedulers.trampoline())
+                .observeOn(new TestScheduler())
                 .subscribe(observerPokemonFound);
 
         verify(localDataSource).getPokemon(pokemonModel.getId());
@@ -141,7 +141,7 @@ public class PokemonRepositoryTest {
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
 
         pokemonRepository.getPokemon(pokemonModel.getId())
-                .observeOn(Schedulers.trampoline())
+                .observeOn(new TestScheduler())
                 .subscribe(observerPokemonFound);
 
         verify(localDataSource).getPokemon(pokemonModel.getId());
@@ -160,7 +160,7 @@ public class PokemonRepositoryTest {
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
 
         pokemonRepository.getAllLocalPokemonSortedById()
-                .observeOn(Schedulers.trampoline())
+                .observeOn(new TestScheduler())
                 .subscribe(observerPokemonFound);
 
         verify(localDataSource).getAllLocalPokemonSortedById();
@@ -179,7 +179,7 @@ public class PokemonRepositoryTest {
         TestObserver<PokemonModel> observerPokemonFound = new TestObserver<>();
 
         pokemonRepository.getAllLocalPokemonSortedById()
-                .observeOn(Schedulers.trampoline())
+                .observeOn(new TestScheduler())
                 .subscribe(observerPokemonFound);
 
         verify(localDataSource).getAllLocalPokemonSortedById();
@@ -199,7 +199,7 @@ public class PokemonRepositoryTest {
 
         // insert
         pokemonRepository.savePokemon(pokemonModel)
-                .observeOn(Schedulers.trampoline())
+                .observeOn(new TestScheduler())
                 .subscribe(observerInserting);
 
         verify(localDataSource).savePokemon(pokemonModel);
@@ -221,7 +221,7 @@ public class PokemonRepositoryTest {
 
         // insert first
         pokemonRepository.savePokemon(pokemonModel)
-                .observeOn(Schedulers.trampoline())
+                .observeOn(new TestScheduler())
                 .subscribe(observerInserting);
         observerInserting.assertValueCount(1);
         observerInserting.assertValue(pokemonModel);
@@ -232,7 +232,7 @@ public class PokemonRepositoryTest {
         pokemonModel.setName("CHANGED");
         // update
         pokemonRepository.savePokemon(pokemonModel)
-                .observeOn(Schedulers.trampoline())
+                .observeOn(new TestScheduler())
                 .subscribe(observerUpdating);
 
         String nameAfter = observerUpdating.values().get(0).getName();

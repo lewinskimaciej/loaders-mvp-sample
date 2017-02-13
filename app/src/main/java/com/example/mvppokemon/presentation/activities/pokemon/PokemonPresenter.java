@@ -27,7 +27,7 @@ public final class PokemonPresenter extends BasePresenter<PokemonView> implement
         super.onStart(firstStart);
 
         if (pokemonModel != null) {
-            setUpPokemon(pokemonModel);
+            setPokemon(pokemonModel);
         }
     }
 
@@ -39,12 +39,11 @@ public final class PokemonPresenter extends BasePresenter<PokemonView> implement
     @Override
     public void getPokemonId(int pokemonId) {
         pokemonRepository.getPokemon(pokemonId)
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<PokemonModel>() {
                     @Override
                     public void onNext(PokemonModel value) {
                         pokemonModel = value;
-                        setUpPokemon(pokemonModel);
+                        setPokemon(pokemonModel);
                     }
 
                     @Override
@@ -59,7 +58,8 @@ public final class PokemonPresenter extends BasePresenter<PokemonView> implement
                 });
     }
 
-    private void setUpPokemon(PokemonModel pokemon) {
+    @Override
+    public void setPokemon(PokemonModel pokemon) {
         if (view != null) {
             view.setPokemonId((int) pokemon.getId());
             view.setPokemonSprite(pokemon.getSprites().getFrontDefault());
