@@ -21,7 +21,7 @@ import java.util.concurrent.CountDownLatch;
 
 import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.observers.TestObserver;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.schedulers.TestScheduler;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import retrofit2.Retrofit;
@@ -44,6 +44,7 @@ public class PokemonRemoteDataSourceTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler(schedulerCallable -> new TestScheduler());
 
         server = new MockWebServer();
 
@@ -56,8 +57,6 @@ public class PokemonRemoteDataSourceTest {
         PokemonRetrofitInterface pokemonRetrofitInterface = retrofit.create(PokemonRetrofitInterface.class);
 
         pokemonRemoteDataSource = new PokemonRemoteDataSource(pokemonRetrofitInterface);
-
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler(__ -> Schedulers.trampoline());
     }
 
     @After

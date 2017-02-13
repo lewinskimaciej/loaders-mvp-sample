@@ -1,27 +1,15 @@
 package com.example.mvppokemon.presentation.fragments.list;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-
-import com.example.mvppokemon.common.dictionaries.BundleKey;
 import com.example.mvppokemon.dagger.qualifier.Repository;
 import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
 import com.example.mvppokemon.presentation.base.BasePresenter;
-import com.example.mvppokemon.presentation.activities.pokemon.PokemonActivity;
-import com.example.mvppokemon.presentation.events.PokemonClickedEvent;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
@@ -40,20 +28,13 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
     @Override
     public void onStart(boolean firstStart) {
         super.onStart(firstStart);
-        EventBus.getDefault().register(this);
         if (view != null) {
             if (pokemonModelList != null) {
                 view.setElementsInAdapter(pokemonModelList);
             } else {
-                getAllLocalPokemon();
+                refreshData();
             }
         }
-    }
-
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
     }
 
     @Override
@@ -68,7 +49,6 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
             pokemonModelList = new ArrayList<>();
 
             pokemonRepository.getAllLocalPokemonSortedById()
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new DisposableObserver<PokemonModel>() {
                         @Override
                         public void onNext(PokemonModel value) {
@@ -97,15 +77,4 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPokemonClicked(PokemonClickedEvent event) {
-        if (view != null) {
-            Activity activity = view.getParentActivity();
-            Intent intent = new Intent(activity, PokemonActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putLong(BundleKey.KEY_POKEMON_ID, event.getPokemonModel().getId());
-            intent.putExtras(bundle);
-            activity.startActivity(intent);
-        }
-    }
 }

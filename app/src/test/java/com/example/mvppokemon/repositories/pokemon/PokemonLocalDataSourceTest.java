@@ -25,7 +25,7 @@ import java.util.concurrent.CountDownLatch;
 
 import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.observers.TestObserver;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.schedulers.TestScheduler;
 import io.requery.Persistable;
 import io.requery.android.sqlite.DatabaseSource;
 import io.requery.reactivex.ReactiveEntityStore;
@@ -54,6 +54,7 @@ public class PokemonLocalDataSourceTest {
     @Before
     public void setup() {
         context = RuntimeEnvironment.application;
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler(schedulerCallable -> new TestScheduler());
 
         DatabaseSource source = new DatabaseSource(context, Models.DEFAULT, 1);
         source.setTableCreationMode(TableCreationMode.DROP_CREATE);
@@ -64,8 +65,6 @@ public class PokemonLocalDataSourceTest {
                 new EntityDataStore<Persistable>(configuration));
 
         pokemonLocalDataSource = new PokemonLocalDataSource(dataStore);
-
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler(__ -> Schedulers.trampoline());
     }
 
     @After

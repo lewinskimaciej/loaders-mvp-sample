@@ -2,6 +2,7 @@ package com.example.mvppokemon.presentation.fragments.list;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,14 +15,21 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.mvppokemon.R;
+import com.example.mvppokemon.common.dictionaries.BundleKey;
 import com.example.mvppokemon.dagger.component.ApplicationComponent;
 import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.PokemonRepositoryModule;
+import com.example.mvppokemon.presentation.activities.pokemon.PokemonActivity;
+import com.example.mvppokemon.presentation.adapters.recycler.PokemonRecyclerViewAdapter.PokemonRecyclerViewAdapter;
 import com.example.mvppokemon.presentation.base.BaseFragment;
 import com.example.mvppokemon.presentation.base.PresenterFactory;
-import com.example.mvppokemon.presentation.adapters.recycler.PokemonRecyclerViewAdapter.PokemonRecyclerViewAdapter;
+import com.example.mvppokemon.presentation.events.PokemonClickedEvent;
 import com.example.mvppokemon.presentation.fragments.list.dagger.DaggerListViewComponent;
 import com.example.mvppokemon.presentation.fragments.list.dagger.ListViewModule;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -72,6 +80,19 @@ public final class ListFragment extends BaseFragment<ListPresenter, ListView> im
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
     private void setUpPokemonRecyclerView() {
         swipeRefreshLayout.setOnRefreshListener(() -> {
             if (presenter != null) {
@@ -109,19 +130,22 @@ public final class ListFragment extends BaseFragment<ListPresenter, ListView> im
     }
 
     @Override
-    public void addElementToAdapter(PokemonModel pokemon) {
-        pokemonRecyclerViewAdapter.addPokemon(pokemon);
-    }
-
-    @Override
     public void setRefreshing(boolean visibility) {
         swipeRefreshLayout.setRefreshing(visibility);
     }
 
     @Override
-    public Activity getParentActivity() {
-        return getActivity();
+    public void showPokemon(PokemonModel pokemonModel) {
+        Activity activity = getActivity();
+        Intent intent = new Intent(activity, PokemonActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putLong(BundleKey.KEY_POKEMON_ID, pokemonModel.getId());
+        intent.putExtras(bundle);
+        activity.startActivity(intent);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPokemonClicked(PokemonClickedEvent event) {
 
+    }
 }

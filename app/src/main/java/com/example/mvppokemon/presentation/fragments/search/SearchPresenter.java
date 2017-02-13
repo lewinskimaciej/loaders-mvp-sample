@@ -38,7 +38,6 @@ public final class SearchPresenter extends BasePresenter<SearchView> implements 
         if (view != null) {
             view.setButtonEnabled(false);
             pokemonRepository.getPokemon(number)
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new DisposableObserver<PokemonModel>() {
                         @Override
                         public void onNext(PokemonModel value) {

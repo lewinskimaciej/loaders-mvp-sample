@@ -1,4 +1,5 @@
-package com.example.mvppokemon.presentation.fragments.search;
+package com.example.mvppokemon.presentation.fragments.list;
+
 
 import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
@@ -12,40 +13,43 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.plugins.RxAndroidPlugins;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.TestScheduler;
 import timber.log.Timber;
 
-import static org.mockito.Matchers.anyLong;
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class SearchPresenterTest {
+public class ListPresenterTest {
 
-    private List<PokemonModel> pokemonList = setUpFakePokemonList();
+    private ArrayList<PokemonModel> pokemonList = setUpFakePokemonList();
 
     @Mock
     PokemonRepositoryInterface pokemonRepository;
 
     @Mock
-    SearchView searchView;
+    ListView listView;
 
     // SUT
-    private SearchPresenterInterface searchPresenter;
+    private ListPresenterInterface listPresenter;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
         RxAndroidPlugins.setInitMainThreadSchedulerHandler(schedulerCallable -> new TestScheduler());
+        setPokemonToGetFromRepository(pokemonList);
 
-        searchPresenter = new SearchPresenter(pokemonRepository);
+        listPresenter = new ListPresenter(pokemonRepository);
         // attach view to presenter
-        searchPresenter.onViewAttached(searchView);
+        listPresenter.onViewAttached(listView);
     }
 
     @After
@@ -54,93 +58,50 @@ public class SearchPresenterTest {
     }
 
     @Test
-    public void setPokemon() {
-        PokemonModel pokemonModel = pokemonList.get(0);
-
-        searchPresenter.setPokemonData(pokemonModel);
-
-        verify(searchView).setPokemon(pokemonModel);
-    }
-
-    @Test
-    public void initialSetup() {
+    public void initListOnStart() {
         // simulate start
-        searchPresenter.onStart(true);
-
-        PokemonModel pokemonModel = pokemonList.get(0);
-
-        // set pokemon so it remembers the last search before changing configuration
-        searchPresenter.setPokemonData(pokemonModel);
-
+        listPresenter.onStart(true);
 
         // simulate configuration change
         // and check if presenter sets pokemon
-        searchPresenter.onStart(false);
+        listPresenter.onStart(false);
 
-        // pokemon should be set up on view two times, when setting pokemon for the first time
-        // and when changing configuration
-        verify(searchView, times(2)).setPokemon(pokemonModel);
+        // when configuration changed, existing list should be used instead of a repository call
+        verify(pokemonRepository).getAllLocalPokemonSortedById();
+
+        // verify that elements were set in view twice, first time on regular start,
+        // then second, on configuration change
+        verify(listView, times(2)).setElementsInAdapter(pokemonList);
     }
 
     @Test
-    public void pokemonClicked() {
-        PokemonModel pokemonModel = pokemonList.get(0);
+    public void refreshData() {
+        listPresenter.refreshData();
 
-        setPokemonToGetFromDataSources(pokemonModel, 2);
+        verify(pokemonRepository).getAllLocalPokemonSortedById();
 
-        // just to set pokemon as current
-        searchPresenter.setPokemonData(pokemonModel);
-
-        // simulate clicking pokemon
-        searchPresenter.pokemonClicked();
-
-        //check if proper method was started
-        verify(searchView).startPokemonActivity(pokemonModel);
+        verify(listView).setElementsInAdapter(pokemonList);
     }
 
     @Test
-    public void getPokemon() {
-        PokemonModel pokemonModel = pokemonList.get(0);
+    public void refreshingAnimation() {
+        listPresenter.refreshData();
 
-        // one of the sources does not have needed data
-        setPokemonToGetFromDataSources(pokemonModel, 2);
-
-        searchPresenter.getPokemon((int) pokemonModel.getId());
-
-        verify(pokemonRepository).getPokemon(pokemonModel.getId());
-        // might be called few times when data comes from multiple sources
-        verify(searchView, atLeast(1)).setPokemon(pokemonModel);
+        verify(listView).setRefreshing(true);
+        verify(listView).setRefreshing(false);
     }
 
-    @Test
-    public void changeButtonStateWhenGettingPokemon() {
-        PokemonModel pokemonModel = pokemonList.get(0);
-
-        setPokemonToGetFromDataSources(pokemonModel, 2);
-
-        searchPresenter.getPokemon((int) pokemonModel.getId());
-
-        verify(searchView).setButtonEnabled(false);
-        // might be called few times when data comes from multiple sources
-        verify(searchView, atLeast(1)).setButtonEnabled(true);
-    }
-
-    private void setPokemonToGetFromDataSources(PokemonModel pokemonToGet, int numberOfSources) {
+    private void setPokemonToGetFromRepository(ArrayList<PokemonModel> pokemonToGet) {
         if (pokemonToGet != null) {
-            List<PokemonModel> list = new ArrayList<>();
-            for (int i = 0; i < numberOfSources; i++) {
-                list.add(pokemonToGet);
-            }
-
-            when(pokemonRepository.getPokemon(pokemonToGet.getId()))
-                    .thenReturn(Observable.fromIterable(list));
+            when(pokemonRepository.getAllLocalPokemonSortedById())
+                    .thenReturn(Observable.fromIterable(pokemonToGet));
         } else {
-            when(pokemonRepository.getPokemon(anyLong()))
+            when(pokemonRepository.getAllLocalPokemonSortedById())
                     .thenReturn(Observable.empty());
         }
     }
 
-    private List<PokemonModel> setUpFakePokemonList() {
+    private ArrayList<PokemonModel> setUpFakePokemonList() {
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayList<PokemonModel> list = new ArrayList<>();
 

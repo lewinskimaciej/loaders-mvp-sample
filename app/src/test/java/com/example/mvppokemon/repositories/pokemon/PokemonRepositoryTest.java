@@ -19,6 +19,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.schedulers.TestScheduler;
 import timber.log.Timber;
 
 import static org.junit.Assert.assertNotEquals;
@@ -45,10 +46,9 @@ public class PokemonRepositoryTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler(schedulerCallable -> new TestScheduler());
 
         pokemonRepository = new PokemonRepository(remoteDataSource, localDataSource);
-
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler(__ -> Schedulers.trampoline());
     }
 
     @After
