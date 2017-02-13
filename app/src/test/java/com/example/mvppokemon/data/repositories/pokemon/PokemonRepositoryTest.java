@@ -1,7 +1,6 @@
-package com.example.mvppokemon.repositories.pokemon;
+package com.example.mvppokemon.data.repositories.pokemon;
 
 import com.example.mvppokemon.data.models.PokemonModel;
-import com.example.mvppokemon.data.repositories.pokemon.PokemonRepository;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonDataSource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

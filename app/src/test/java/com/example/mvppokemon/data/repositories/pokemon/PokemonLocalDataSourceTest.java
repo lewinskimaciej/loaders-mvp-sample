@@ -1,4 +1,4 @@
-package com.example.mvppokemon.repositories.pokemon;
+package com.example.mvppokemon.data.repositories.pokemon;
 
 import android.content.Context;
 
@@ -6,7 +6,6 @@ import com.example.mvppokemon.BuildConfig;
 import com.example.mvppokemon.data.models.Models;
 import com.example.mvppokemon.data.models.PokemonModel;
 import com.example.mvppokemon.data.models.StatsModel;
-import com.example.mvppokemon.data.repositories.pokemon.PokemonLocalDataSource;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonDataSource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
