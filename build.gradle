@@ -48,6 +48,9 @@ ext {
     rulesVersion = '0.5'
     espressoVersion = '2.2.2'
     dexmakerVersion = '1.2'
+    multidexVersion = '1.0.1'
+    //
+    greenCoffeeVersion = "1.0.0"
     //
     daggerVersion = '2.9'
     jsr250Version = '1.0'

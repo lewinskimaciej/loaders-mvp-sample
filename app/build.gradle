@@ -12,14 +12,17 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.example.mvp_pokemon"
+        applicationId "com.example.com.example.mvppokemon"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 
         versionCode 1
         versionName "1.0"
 
+        testApplicationId "com.example.com.example.mvppokemon.test"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled = true
 
         jackOptions {
             enabled false
@@ -36,13 +39,11 @@ android {
         debug {
             testCoverageEnabled = true
             minifyEnabled false
-            useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             testProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguardTest-rules.pro'
         }
         release {
             minifyEnabled true
-            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             testProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguardTest-rules.pro'
         }
@@ -150,7 +151,7 @@ dependencies {
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     //
-    // Dependencies for local unit tests
+    // Dependencies for local unit cucumber.tests
     testCompile "junit:junit:$rootProject.ext.junitVersion"
     testCompile "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"
     testCompile "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrestVersion"
@@ -159,12 +160,20 @@ dependencies {
     testCompile "com.squareup.okhttp3:mockwebserver:$rootProject.ext.okHttpVersion"
 
     //
-    // Android Testing Support Library's runner and rules
-    androidTestCompile "com.android.support.test:runner:$rootProject.ext.runnerVersion"
-    androidTestCompile "com.android.support.test:rules:$rootProject.ext.runnerVersion"
+    // Cucumber
+    compile "com.mauriciotogneri:greencoffee:$rootProject.ext.greenCoffeeVersion"
 
     //
-    // Dependencies for Android unit tests
+    // Multidex
+    androidTestCompile "com.android.support:multidex:$rootProject.ext.multidexVersion"
+
+    //
+    // Android Testing Support Library's runner and rules
+    androidTestCompile "com.android.support.test:runner:$rootProject.ext.runnerVersion"
+    androidTestCompile "com.android.support.test:rules:$rootProject.ext.rulesVersion"
+
+    //
+    // Dependencies for Android unit cucumber.tests
     androidTestCompile "junit:junit:$rootProject.ext.junitVersion"
     androidTestCompile "org.mockito:mockito-core:$rootProject.ext.mockitoVersion"
 

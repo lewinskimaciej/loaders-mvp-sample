@@ -16,7 +16,7 @@
 #   public *;
 #}
 
-# Some methods are only called from tests, so make sure the shrinker keeps them.
+# Some methods are only called from cucumber.tests, so make sure the shrinker keeps them.
 -keep class com.example.android.architecture.blueprints.** { *; }
 
 -keep class android.support.v4.widget.DrawerLayout { *; }

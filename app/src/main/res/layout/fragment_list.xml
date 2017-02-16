@@ -19,12 +19,4 @@
             android:layout_marginStart="@dimen/recycler_view_side_margin" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:visibility="gone"
-        android:layout_centerInParent="true" />
-
 </RelativeLayout>

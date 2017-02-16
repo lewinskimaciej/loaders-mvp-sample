@@ -48,9 +48,6 @@ public final class ListFragment extends BaseFragment<ListPresenter, ListView> im
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
-
     @Inject
     PresenterFactory<ListPresenter> presenterFactory;
 
