@@ -136,9 +136,9 @@ dependencies {
 
     //
     // LeakCanary
-    debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.leakCanaryBusVersion"
-    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.leakCanaryBusVersion"
-    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.leakCanaryBusVersion"
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.leakCanaryVersion"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.leakCanaryVersion"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.leakCanaryVersion"
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                            //
