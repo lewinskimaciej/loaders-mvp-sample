@@ -51,7 +51,6 @@ public class StatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public void setStats(List<StatsModel> statsList) {
         this.stats = new ArrayList<>(statsList);
-        Collections.sort(stats, comparator);
         notifyDataSetChanged();
     }
 }
