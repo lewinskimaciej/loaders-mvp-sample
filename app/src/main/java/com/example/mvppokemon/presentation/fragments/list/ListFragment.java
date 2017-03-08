@@ -143,6 +143,6 @@ public final class ListFragment extends BaseFragment<ListPresenter, ListView> im
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPokemonClicked(PokemonClickedEvent event) {
-
+        showPokemon(event.getPokemonModel());
     }
 }
