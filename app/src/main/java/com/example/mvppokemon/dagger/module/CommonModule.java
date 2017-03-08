@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.example.mvppokemon.common.jackson.EntityMapper;
 import com.example.mvppokemon.dagger.qualifier.AuthenticationInterceptor;
 import com.example.mvppokemon.dagger.qualifier.CachedOkHttpClient;
 import com.example.mvppokemon.dagger.qualifier.CachedRetrofit;
@@ -21,6 +20,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import io.requery.Persistable;
+import io.requery.jackson.EntityMapper;
 import io.requery.reactivex.ReactiveEntityStore;
 import okhttp3.Cache;
 import okhttp3.Interceptor;

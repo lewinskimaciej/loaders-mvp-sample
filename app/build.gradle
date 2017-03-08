@@ -5,7 +5,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 apply from: '../sonarqube.gradle'
-apply from: '../jacoco.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -102,10 +101,6 @@ dependencies {
     provided "javax.annotation:jsr250-api:$rootProject.ext.jsr250Version"
 
     //
-    // JobQueue
-    compile "com.birbit:android-priority-jobqueue:$rootProject.ext.jobQueueVersion"
-
-    //
     // Jackson
     compile "com.fasterxml.jackson.core:jackson-core:$rootProject.ext.jacksonVersion"
     compile "com.fasterxml.jackson.core:jackson-databind:$rootProject.ext.jacksonVersion"
@@ -128,6 +123,7 @@ dependencies {
     // Requery
     compile "io.requery:requery:$rootProject.ext.requeryVersion"
     compile "io.requery:requery-android:$rootProject.ext.requeryVersion"
+    compile "io.requery:requery-jackson:$rootProject.ext.requeryVersion"
     apt "io.requery:requery-processor:$rootProject.ext.requeryVersion"
 
     //
