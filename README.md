@@ -1,4 +1,4 @@
-# My MVP sample
+# MVP sample based on loaders
 
 This sample is based on [this MVP Android Studio template](https://github.com/Howard9891/Android-Studio-MVP-template), uses loaders to preserve Presenter's state and is made with:
 - [PokeAPI](https://pokeapi.co/)
