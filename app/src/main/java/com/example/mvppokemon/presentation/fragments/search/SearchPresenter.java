@@ -44,24 +44,28 @@ public final class SearchPresenter extends BasePresenter<SearchView> implements 
                         public void onNext(PokemonModel value) {
                             Timber.d("Pokemon name: %s", String.valueOf(value.getName()));
                             setPokemonData(value);
-                            view.setButtonEnabled(true);
+                            if (view != null) {
+                                view.setButtonEnabled(true);
+                            }
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             Timber.e(e, "error");
-                            view.setButtonEnabled(true);
-                            if (e instanceof HttpException) {
-                                switch (((HttpException) e).code()) {
-                                    case HttpCode.NOT_FOUND:
-                                        onNotFound();
-                                        break;
-                                    case HttpCode.INTERNAL_SERVER_ERROR:
-                                        onInternalServerError();
-                                        break;
-                                    default:
-                                        onGenericError();
-                                        break;
+                            if (view != null) {
+                                view.setButtonEnabled(true);
+                                if (e instanceof HttpException) {
+                                    switch (((HttpException) e).code()) {
+                                        case HttpCode.NOT_FOUND:
+                                            onNotFound();
+                                            break;
+                                        case HttpCode.INTERNAL_SERVER_ERROR:
+                                            onInternalServerError();
+                                            break;
+                                        default:
+                                            onGenericError();
+                                            break;
+                                    }
                                 }
                             }
                         }
@@ -69,7 +73,9 @@ public final class SearchPresenter extends BasePresenter<SearchView> implements 
                         @Override
                         public void onComplete() {
                             Timber.d("onComplete");
-                            view.setButtonEnabled(true);
+                            if (view != null) {
+                                view.setButtonEnabled(true);
+                            }
                         }
                     });
         }

@@ -126,8 +126,9 @@ public final class SearchFragment extends BaseFragment<SearchPresenter, SearchVi
 
     @OnClick(R.id.button)
     public void getPokemon() {
-        if (presenter != null) {
-            int number = Integer.parseInt(numberInput.getText().toString());
+        String text = numberInput.getText().toString();
+        if (presenter != null && !text.isEmpty()) {
+            int number = Integer.parseInt(text);
             presenter.getPokemon(number);
         }
     }

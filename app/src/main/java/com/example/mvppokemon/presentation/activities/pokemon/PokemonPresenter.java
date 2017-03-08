@@ -39,6 +39,7 @@ public final class PokemonPresenter extends BasePresenter<PokemonView> implement
     @Override
     public void getPokemonId(int pokemonId) {
         pokemonRepository.getPokemon(pokemonId)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<PokemonModel>() {
                     @Override
                     public void onNext(PokemonModel value) {
