@@ -30,7 +30,7 @@ ext {
     buildToolsVersion = '25.0.0'
 
     // App dependencies
-    supportLibraryVersion = '25.1.1'
+    supportLibraryVersion = '25.2.0'
     guavaVersion = '20.0'
     timberVersion = '4.3.1'
     butterKnifeVersion = '8.4.0'

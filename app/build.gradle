@@ -1,10 +1,6 @@
-plugins {
-    id "org.sonarqube" version "1.2"
-}
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'me.tatarka.retrolambda'
-apply from: '../sonarqube.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -36,13 +32,14 @@ android {
 
     buildTypes {
         debug {
-            testCoverageEnabled = true
             minifyEnabled false
+            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             testProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguardTest-rules.pro'
         }
         release {
             minifyEnabled true
+            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             testProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguardTest-rules.pro'
         }

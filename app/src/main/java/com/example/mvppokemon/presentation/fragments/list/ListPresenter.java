@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
@@ -49,6 +50,7 @@ public final class ListPresenter extends BasePresenter<ListView> implements List
             pokemonModelList = new ArrayList<>();
 
             pokemonRepository.getAllLocalPokemonSortedById()
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new DisposableObserver<PokemonModel>() {
                         @Override
                         public void onNext(PokemonModel value) {
