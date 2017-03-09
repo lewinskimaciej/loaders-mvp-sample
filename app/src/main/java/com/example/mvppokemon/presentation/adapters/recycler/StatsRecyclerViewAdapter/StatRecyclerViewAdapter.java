@@ -13,12 +13,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Created on 12.01.2017.
- *
- * @author Maciej Lewinski
- */
-
 public class StatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<StatsModel> stats;

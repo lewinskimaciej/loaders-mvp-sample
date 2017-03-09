@@ -1,11 +1,5 @@
 package com.example.mvppokemon.common.dictionaries;
 
-/**
- * Created on 01.02.2017.
- *
- * @author Maciej Lewinski
- */
-
 public final class HttpCode {
     public static final int OK = 200;
     public static final int CREATED = 201;

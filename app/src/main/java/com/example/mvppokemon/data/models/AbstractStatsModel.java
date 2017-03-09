@@ -13,11 +13,6 @@ import io.requery.ManyToOne;
 import io.requery.OneToOne;
 import io.requery.Persistable;
 
-/**
- * Created on 25.01.2017.
- *
- * @author Maciej Lewinski
- */
 @Entity
 public abstract class AbstractStatsModel implements Parcelable, Persistable {
 

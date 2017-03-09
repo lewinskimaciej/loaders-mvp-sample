@@ -12,12 +12,6 @@ import com.example.mvppokemon.data.models.PokemonModel;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created on 12.01.2017.
- *
- * @author Maciej Lewinski
- */
-
 public class PokemonRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;

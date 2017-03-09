@@ -17,12 +17,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created on 01.02.2017.
- *
- * @author Maciej Lewinski
- */
-
 public class PokemonHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.pokemon_number)

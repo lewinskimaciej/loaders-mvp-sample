@@ -11,12 +11,6 @@ import io.requery.Key;
 import io.requery.OneToOne;
 import io.requery.Persistable;
 
-/**
- * Created on 13.01.2017.
- *
- * @author Maciej Lewinski
- */
-
 @Entity
 public abstract class AbstractSpritesModel implements Parcelable, Persistable {
 

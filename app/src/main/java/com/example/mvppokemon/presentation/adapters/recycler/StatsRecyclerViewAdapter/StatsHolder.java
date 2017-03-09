@@ -10,11 +10,6 @@ import com.example.mvppokemon.data.models.StatsModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created on 02.02.2017.
- *
- * @author Maciej Lewinski
- */
 
 public class StatsHolder extends RecyclerView.ViewHolder {
 

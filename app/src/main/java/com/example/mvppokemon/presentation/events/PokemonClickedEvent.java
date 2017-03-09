@@ -2,11 +2,6 @@ package com.example.mvppokemon.presentation.events;
 
 import com.example.mvppokemon.data.models.PokemonModel;
 
-/**
- * Created on 02.02.2017.
- *
- * @author Maciej Lewinski
- */
 public class PokemonClickedEvent {
     private PokemonModel pokemonModel;
 

@@ -7,11 +7,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.example.mvppokemon.presentation.fragments.list.ListFragment;
 import com.example.mvppokemon.presentation.fragments.search.SearchFragment;
 
-/**
- * Created on 10.01.2017.
- *
- * @author Maciej Lewinski
- */
 public class MainScreenPagerAdapter extends FragmentPagerAdapter {
 
     @SuppressWarnings("FieldCanBeLocal")

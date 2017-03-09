@@ -14,12 +14,6 @@ import io.requery.OneToMany;
 import io.requery.OneToOne;
 import io.requery.Persistable;
 
-/**
- * Created on 13.01.2017.
- *
- * @author Maciej Lewinski
- */
-
 @Entity
 public abstract class AbstractPokemonModel implements Parcelable, Persistable {
 

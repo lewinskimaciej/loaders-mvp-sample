@@ -6,11 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Qualifier;
 
-/**
- * The qualifier for OkHttp instance without cache
- *
- * @author Slawomir Onyszko
- */
 @Qualifier
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

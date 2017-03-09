@@ -6,11 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Qualifier;
 
-/**
- * The qualifier for Retrofit authentication interceptor
- *
- * @author Slawomir Onyszko
- */
 @Qualifier
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

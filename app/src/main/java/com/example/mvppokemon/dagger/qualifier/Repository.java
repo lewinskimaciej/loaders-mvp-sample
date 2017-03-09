@@ -6,9 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Qualifier;
 
-/**
- * @author Sławomir Onyszko
- */
 @Qualifier
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
