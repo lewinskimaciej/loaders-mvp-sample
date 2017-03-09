@@ -120,7 +120,6 @@ dependencies {
     // Requery
     compile "io.requery:requery:$rootProject.ext.requeryVersion"
     compile "io.requery:requery-android:$rootProject.ext.requeryVersion"
-    compile "io.requery:requery-jackson:$rootProject.ext.requeryVersion"
     apt "io.requery:requery-processor:$rootProject.ext.requeryVersion"
 
     //

@@ -9,7 +9,6 @@ import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonReposi
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public final class PokemonRepository implements PokemonRepositoryInterface {
 

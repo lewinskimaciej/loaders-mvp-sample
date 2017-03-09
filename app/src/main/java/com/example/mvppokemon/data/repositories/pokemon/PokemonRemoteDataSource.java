@@ -7,7 +7,6 @@ import com.example.mvppokemon.data.retrofit.PokemonRetrofitInterface;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public final class PokemonRemoteDataSource implements PokemonDataSource {

@@ -66,15 +66,6 @@ public class PokemonLocalDataSourceTest {
         pokemonLocalDataSource = new PokemonLocalDataSource(dataStore);
     }
 
-    @After
-    public void teardown() {
-        if (dataStore != null) {
-            dataStore.delete(PokemonModel.class);
-            dataStore.close();
-        }
-        RxAndroidPlugins.reset();
-    }
-
     @Test
     public void getOnePokemonThatExists() {
         PokemonModel pokemonModel = pokemonList.get(0);

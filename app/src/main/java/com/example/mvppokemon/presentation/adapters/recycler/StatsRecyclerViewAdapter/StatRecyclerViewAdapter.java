@@ -9,7 +9,6 @@ import com.example.mvppokemon.R;
 import com.example.mvppokemon.data.models.StatsModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 

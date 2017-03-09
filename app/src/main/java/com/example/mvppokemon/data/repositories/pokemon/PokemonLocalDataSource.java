@@ -34,12 +34,11 @@ public final class PokemonLocalDataSource implements PokemonDataSource {
     public Observable<PokemonModel> savePokemon(final PokemonModel pokemon) {
         List<StatsModel> tempList = new ArrayList<>(pokemon.getStats());
 
-        pokemon.getStats().clear();
-
-
         return database.upsert(pokemon)
                 .toObservable()
                 .map(pokemonModel -> {
+                    pokemonModel.getStats().clear();
+
                     for (StatsModel statsModel : tempList) {
                         pokemonModel.getStats().add(statsModel);
                     }

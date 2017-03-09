@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.example.mvppokemon.dagger.qualifier.Repository;
 import com.example.mvppokemon.data.repositories.pokemon.interfaces.PokemonRepositoryInterface;
-import com.example.mvppokemon.presentation.base.PresenterFactory;
 import com.example.mvppokemon.presentation.activities.pokemon.PokemonPresenter;
+import com.example.mvppokemon.presentation.base.PresenterFactory;
 
 import dagger.Module;
 import dagger.Provides;

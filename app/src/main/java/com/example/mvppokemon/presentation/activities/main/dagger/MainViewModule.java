@@ -1,7 +1,7 @@
 package com.example.mvppokemon.presentation.activities.main.dagger;
 
-import com.example.mvppokemon.presentation.base.PresenterFactory;
 import com.example.mvppokemon.presentation.activities.main.MainPresenter;
+import com.example.mvppokemon.presentation.base.PresenterFactory;
 
 import dagger.Module;
 import dagger.Provides;
